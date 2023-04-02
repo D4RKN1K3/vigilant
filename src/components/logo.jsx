@@ -5,7 +5,7 @@ import Constants from 'expo-constants'
 const Logo = () => {
     return (
         
-        <View style={ {marginTop: Constants.statusBarHeight, flexGrow: 1 }  }>
+        <View style={ {marginTop: Constants.statusBarHeight, alignItems: 'center', justifyContent: 'center' }  }>
             <Image style={styles.img} source={require('../image/Logovigilant.png')} />
         </View>
 
@@ -20,6 +20,5 @@ const styles = StyleSheet.create({
         width: 200,
         resizeMode: 'contain',
         alignContent: 'center',
-        
     },
   });

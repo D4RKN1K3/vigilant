@@ -4,7 +4,7 @@ import Constants from 'expo-constants'
 
 const Main = () => {
     return (
-        <View style={ {marginTop: Constants.statusBarHeight, flexGrow: 1 }  }>
+        <View style={ {marginTop: Constants.statusBarHeight }  }>
         <Text>Vigilant</Text>
         <Text>Alarma Vecinal</Text>
         </View>
