@@ -3,6 +3,8 @@ import { StyleSheet, Text, View , Image,Button, Alert, Pressable } from 'react-n
 import Main from './src/components/Main.jsx';
 import Logo from './src/components/logo.jsx';
 import Botones from './src/components/botones.jsx';
+import { AUTHENTICATION_API_URL } from '@env'
+console.log(AUTHENTICATION_API_URL)
 
 export default function App() {
   return (
@@ -10,7 +12,6 @@ export default function App() {
       
       <Logo />
       <Botones />
-
       
     
     </>
