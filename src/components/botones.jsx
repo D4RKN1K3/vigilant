@@ -1,6 +1,8 @@
 import React from 'react'
 import {StyleSheet, View,  Pressable, Button, Alert } from 'react-native'
 import Constants from 'expo-constants'
+import {login, register} from '../data/Autentication'
+
 
 const Botones = () => {
     return (
@@ -9,7 +11,16 @@ const Botones = () => {
                 <Button 
                     title="Inicar Sesion"
                     color="#f5bc0c"
-                    onPress={() => Alert.alert('Inicio de sesion')}
+                    onPress={() => {
+                        let response = login('test', 'test')
+                        console.log(response)
+                        if (response) {
+                            Alert.alert(response)
+                        } else {
+                            Alert.alert('No se pudo iniciar sesion')
+                        }
+
+                    }}
                 />
 
             </Pressable>
@@ -18,7 +29,15 @@ const Botones = () => {
                 <Button 
                     title="Registrarse"
                     color="#f5bc0c"
-                    onPress={() => Alert.alert('Registrarse')}
+                    onPress={() => {
+                        let response = register('test', 'test')
+                        console.log(response)
+                        if (response) {
+                            Alert.alert(response)
+                        } else {
+                            Alert.alert('No se pudo registrar')
+                        }
+                    }}
                 />
             </Pressable>
 
