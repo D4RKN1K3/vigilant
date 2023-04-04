@@ -12,10 +12,11 @@ const Botones = () => {
                     title="Inicar Sesion"
                     color="#f5bc0c"
                     onPress={() => {
-                        let response = login('test', 'test')
+                        let response = login('olverarce01@gmail.com', '12345')
                         console.log(response)
                         if (response) {
-                            Alert.alert(response)
+                            Alert.alert('Sesion iniciada')
+                            console.log(response)
                         } else {
                             Alert.alert('No se pudo iniciar sesion')
                         }
@@ -33,7 +34,8 @@ const Botones = () => {
                         let response = register('test', 'test')
                         console.log(response)
                         if (response) {
-                            Alert.alert(response)
+                            Alert.alert('Registrado')
+                            console.log(response)
                         } else {
                             Alert.alert('No se pudo registrar')
                         }

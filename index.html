@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="POST" action="https://backend-sistemaalertas-production.up.railway.app/login">
+        <input type="text" name="username">
+        <input type="text" name="password">
+        <input type="submit" value="Enviar">
+    </form>
+
+    <script type="module">
+        import axios from 'https://cdn.skypack.dev/axios';
+        console.log("Hola mundo");
+
+        // username = 'olverarce01@gmail.com'
+        // password = 12345
+        const USERNAME = 'olverarce01@gmail.com'
+        const PASSWORD = '12345'
+
+        // Endpoint de autenticación del servidor
+        let endpoint = 'https://backend-sistemaalertas-production.up.railway.app/login';
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+        var urlencoded = new URLSearchParams();
+        urlencoded.append("username", "olverarce01@gmail.com");
+        urlencoded.append("password", "12345");
+
+        var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: urlencoded,
+        redirect: 'follow'
+        };
+
+        fetch("https://backend-sistemaalertas-production.up.railway.app/login", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+
+        // Fetch GET /getCurrentUser
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        myHeaders.append("Cookie", "connect.sid=s%3AddVAspEvWOjWKhCfYSDfxKa97vvEn_MD.g82QNX2YZieFpp1vOH%2FA3sLtPKoylhfAYIs%2BXUs%2BW6k");
+
+        var urlencoded = new URLSearchParams();
+        urlencoded.append("username", "olverarce01@gmail.com");
+        urlencoded.append("password", "12345");
+
+        var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        body: urlencoded,
+        redirect: 'follow'
+        };
+
+        fetch("https://backend-sistemaalertas-production.up.railway.app/currentUser", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

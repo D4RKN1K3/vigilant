@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/Logovigilant.png",
     "userInterfaceStyle": "light",
+
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
