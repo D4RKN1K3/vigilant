@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "948931661447",
+    "project_id": "vigilant-12535",
+    "storage_bucket": "vigilant-12535.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948931661447:android:a4f21e2402f81565f6f222",
+        "android_client_info": {
+          "package_name": "com.vigilant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "948931661447-dfeipklp142ajl343mc5gmboosnrh3n9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vigilant",
+            "certificate_hash": "26f1a9f800744c46b35bc6a6c6795acb938c1795"
+          }
+        },
+        {
+          "client_id": "948931661447-encjv26s5j68csqmn4mot29t4cljnblo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vigilant",
+            "certificate_hash": "deffef01d6768b8b050ebf1223c1c1891c4b1b1d"
+          }
+        },
+        {
+          "client_id": "948931661447-7dc98m073p9mde4qnv2hrd8h5gij4is2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjb4gxbtK7JG60H2Oy0lAwNnvxph1ReHE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "948931661447-7dc98m073p9mde4qnv2hrd8h5gij4is2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

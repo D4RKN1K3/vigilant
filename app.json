@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/Logovigilant.png",
     "userInterfaceStyle": "light",
-
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -19,13 +18,20 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.vigilant"
     },
     "web": {
       "favicon": "./assets/Logovigilant.png"
-    }  
+    },
+    "extra": {
+      "eas": {
+        "projectId": "522ae193-4ccf-4496-aafc-febd9f6ded85"
+      }
+    }
   }
 }
