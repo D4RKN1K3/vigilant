@@ -1,8 +1,8 @@
 import React from 'react'
 import {  Text, View, Image, Button } from 'react-native'
 import Constants from 'expo-constants'
-import Botones from './botones'
-import Logo from './logo'
+import Botones from '../components/botones'
+import Logo from '../components/logo'
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Main = ( {navigation} ) => {

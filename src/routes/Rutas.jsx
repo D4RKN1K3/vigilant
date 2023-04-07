@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // Importar las vistas que se van a utilizar
-import Main from '../components/Main';
+import Main from '../UI/Main';
 import Ejemplo from '../UI/ejemplo';
 
 export default function Rutas() {
