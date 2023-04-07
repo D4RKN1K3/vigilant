@@ -5,7 +5,7 @@ import Main from '../UI/Main';
 import Ejemplo from '../UI/ejemplo';
 import Registro from '../UI/registro';
 import Botones from '../components/botones';
-import Autenticacion from '../UI/autenticacion';
+import Login from '../UI/Login';
 
 export default function Rutas() {
     const Stack = createNativeStackNavigator();
@@ -19,7 +19,7 @@ export default function Rutas() {
             <Stack.Screen name="Main" component={Main} options={{ title: 'Vigilant - Alarma vecinal' }}/>
             <Stack.Screen name="Ejemplo" component={Ejemplo} options={{ title: 'Ejemplo' }}/>
             <Stack.Screen name="Registro" component={Registro} options={{ title: 'Registro' }}/>
-            <Stack.Screen name="Autenticacion" component={Autenticacion} options={{ title: 'Inicio de sesion' }}/>
+            <Stack.Screen name="Login" component={Login} options={{ title: 'Inicio de sesion' }}/>
         </Stack.Navigator>
     );
 }

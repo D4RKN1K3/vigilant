@@ -1,9 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {SafeAreaView, StyleSheet, TextInput,Button, Text, View, Pressable } from 'react-native';
-
+import { login } from '../services/auth';
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 
-const Autenticacion = ( {navigation} ) => {
+const Login = ( {navigation} ) => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  function handleLogin() {
+    // Imprimir en consola los datos ingresados
+    console.log("Login");
+    console.log("Email: " + email);
+    console.log("Password: " + password);
+
+    // Llamar a la funcion login() para iniciar sesion
+    let response = login(email, password)
+
+    // Imprimir en consola el resultado de la funcion login()
+    console.log(response)
+    
+  }
+
   return (
     <SafeAreaView>
 
@@ -15,17 +33,23 @@ const Autenticacion = ( {navigation} ) => {
             style={styles.input}
             placeholder='Correo'
             keyboardType="email-address"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
         />
         <TextInput
             style={styles.input}
             placeholder='Contraseña'
             keyboardType="default"
+            secureTextEntry={true}
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
         />
 
         <Pressable style={styles.bt}>
             <Button
                 title="Ingresar"
                 color={"#ff9519"}
+                onPress={handleLogin}
             />   
         </Pressable>
 
@@ -73,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Autenticacion
+export default Login

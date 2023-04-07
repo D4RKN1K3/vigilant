@@ -1,5 +1,5 @@
 import React from 'react'
-import {  Text, View, Image, Button,Pressable, StyleSheet } from 'react-native'
+import { Text, View, Image, Button,Pressable, StyleSheet } from 'react-native'
 import Constants from 'expo-constants'
 import Botones from '../components/botones'
 import Logo from '../components/logo'
@@ -14,7 +14,7 @@ const Main = ( {navigation} ) => {
                 <Button 
                     title="Inicar Sesion"
                     color="#f5bc0c"
-                    onPress={() => navigation.navigate('Autenticacion')}
+                    onPress={() => navigation.navigate('Login')}
                     //onPress={() => {
                         //let response = login('olverarce01@gmail.com', '12345')
                         //console.log(response)
