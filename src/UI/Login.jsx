@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import {SafeAreaView, StyleSheet, TextInput,Button, Text, View, Pressable } from 'react-native';
 import { login } from '../services/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 
 const Login = ( {navigation} ) => {
@@ -11,15 +14,21 @@ const Login = ( {navigation} ) => {
 	// error message
 	const [error, setError] = useState('');
 
-	async function handleLogin() {
-		// Imprimir en consola los datos ingresados
-		console.log("Login");
-		console.log("Email: " + email);
-		console.log("Password: " + password);
+	// Guardar el usuario en el AsyncStorage
+	async function storeUser(value) {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@user', jsonValue)
+        } catch (e) {
+            // saving error
+            console.log(e)
+        }
+		console.log("Usuario guardado")
+    }
 
+	async function handleLogin() {
 		// Llamar a la funcion login() para iniciar sesion
 		let response = await login(email, password)
-		console.log(response)
 
 		// Verificar si hay error 400
 		if (response.status == 400 || response.error == 'invalid credentials') {
@@ -29,8 +38,7 @@ const Login = ( {navigation} ) => {
 			// timeout para que el mensaje de error desaparezca
 			setTimeout(() => {
 				setError('')
-			}
-			, 3000);
+			}, 3000);
 
 			return;
 		}
@@ -49,22 +57,27 @@ const Login = ( {navigation} ) => {
 			return;
 		}
 
-		// Verificar si hay error 200
-		// if (response.status == 200) {
-			// Guardar el token en el localStorage
-			// localStorage.setItem('token', response.data.token)
-		console.log(response.token)
+
+		// Crear objeto usuario
+        let usuario = {
+            id: response._id,
+            nombre: response.name,
+            email: response.username,
+            direccion: response.address,
+            token: response.token
+        }
+
+        // Guardar el usuario en el AsyncStorage
+        storeUser(usuario)
+		
 		// Cambiar de vista a Main
 		navigation.navigate('Main')
-		// }
-
-		
 	}
 
 	return (
-		<SafeAreaView>
+		<SafeAreaView style={styles.container}>
 
-			<Text style={styles.texto} >
+			<Text style={styles.title} >
 				Iniciar Sesión
 			</Text>
 			
@@ -77,7 +90,7 @@ const Login = ( {navigation} ) => {
 				onChange={(e) => setEmail(e.target.value)}
 				value={email}
 			/>
-			
+
 			<TextInput
 				style={styles.input}
 				placeholder='Contraseña'
@@ -87,7 +100,7 @@ const Login = ( {navigation} ) => {
 				value={password}
 			/>
 
-			<Pressable style={styles.bt}>
+			<Pressable style={styles.button}>
 				<Button
 					title="Ingresar"
 					color={"#ff9519"}
@@ -95,26 +108,34 @@ const Login = ( {navigation} ) => {
 				/>   
 			</Pressable>
 
-			<Text style={styles.tx2} >   
+			{/* Separador -o- */}
+			<View style={{flexDirection: 'row', justifyContent: 'center', marginTop: '5%' ,alignItems: 'center', marginVertical:'5%', marginHorizontal:'5%'}}>
+				<View style={{width: '30%', height: 1, backgroundColor: 'black'}} />
+				<Text style={{width: '20%', textAlign: 'center'}}> o </Text>
+				<View style={{width: '30%', height: 1, backgroundColor: 'black'}} />
+			</View>
+
+			<Text style={styles.text} >
 				Olvidaste tu contraseña?
 			</Text>
 
-			<Pressable style={styles.bt}>
+			<Pressable style={styles.button}>
 				<Button
 					title="Recuperar contraseña"
 					color={"#414bb2"}
 				/>   
 			</Pressable>
 
-			<Button
-				title="Inicio"
-				onPress={() => navigation.navigate('Main')}
-			/>
 		</SafeAreaView>
 	);
 };
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+	},
 	input: {
 		height: 40,
 		margin: 12,
@@ -122,19 +143,19 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginTop: '10%',
 	},
-	texto: {
+	title: {
 		fontSize: 40,
 		fontWeight: 'bold',
 		textAlign: 'center',
-		marginTop: '2%',
+		marginBottom: '10%',
 	},
-	bt: {
-		width: '50%',
-		height: '20%',
-		marginLeft: '25%',
-		marginTop: '10%',
-	},
-	tx2: {
+	button: {
+        marginTop: '5%',
+        width: '50%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
+	text: {
 		textAlign: 'center',
 	},
 	alertdanger: {

@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {SafeAreaView, StyleSheet, TextInput,Button, Text, View, Pressable} from 'react-native';
 import {register} from '../services/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 
@@ -14,6 +15,16 @@ const Registro = ( {navigation} ) => {
     // error message
     const [error, setError] = useState('');
     
+    async function storeUser(value) {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@user', jsonValue)
+        } catch (e) {
+            // saving error
+            console.log(e)
+        }
+    }
+
     async function handleRegister() {
         // Llamar a la funcion register() para iniciar sesion
         let response = await register(email, password, nombre, direccion)
@@ -45,9 +56,16 @@ const Registro = ( {navigation} ) => {
             return;
         }
 
-        // Obtener token
-        let token = response.token;
-        console.log(token)
+        // Crear objeto usuario
+        let usuario = {
+            id: response._id,
+            nombre: response.name,
+            email: response.username,
+            direccion: response.address,
+            token: response.token
+        }
+        // Guardar el usuario en el AsyncStorage
+        storeUser(usuario)
 
         // Cambiar de vista a Main
         navigation.navigate('Main')
@@ -55,9 +73,9 @@ const Registro = ( {navigation} ) => {
 
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
 
-            <Text style={styles.texto} >
+            <Text style={styles.title} >
                 Registrarse
             </Text>
 
@@ -93,40 +111,42 @@ const Registro = ( {navigation} ) => {
                 value={direccion}
             />
 
-            <Pressable style={styles.bt}>
+            <Pressable style={styles.button}>
 				<Button
 					title="Registrarse"
 					color={"#ff9519"}
 					onPress={handleRegister}
 				/>   
 			</Pressable>
-
-            <Button
-                title="Inicio"
-                onPress={() => navigation.navigate('Main')}
-            />
+            
         </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+		flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+	},
     input: {
-        height: 40,
+        height: 50,
         margin: 12,
         borderWidth: 1,
         padding: 10,
-        marginTop: '15%',
+        marginTop: '5%',
     },
-    texto: {
+    title: {
         fontSize: 40,
         fontWeight: 'bold',
         textAlign: 'center',
+        marginBottom: '10%',
     },
-    bt: {
+    button: {
+        marginTop: '5%',
         width: '50%',
-        height: '20%',
-        marginLeft: '25%',
-        marginTop: '10%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
     alertdanger: {
 		textAlign: 'center',

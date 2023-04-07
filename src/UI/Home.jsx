@@ -1,13 +1,15 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Text, View, Image, Button,Pressable, StyleSheet } from 'react-native'
 import Constants from 'expo-constants'
 import Botones from '../components/botones'
 import Logo from '../components/logo'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react';
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
-const Main = ( {navigation} ) => {
+const Home = ( {navigation} ) => {
+
+    // USER
+    const [user, setUser] = useState(null);
 
     // Verificar si hay un usuario logeado
     useEffect(() => {
@@ -15,10 +17,12 @@ const Main = ( {navigation} ) => {
         const checkUser = async () => {
             try {
                 const user = await AsyncStorage.getItem('user');
-                if (user) {
-                    console.log('Hay usuario');
-                    navigation.navigate('Home');
-                }                
+                setUser(user);
+
+                if (!user) {
+                    console.log('No hay usuario');
+                    navigation.navigate('Main');
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -27,7 +31,6 @@ const Main = ( {navigation} ) => {
         checkUser();
 
     }, []);
-
 
     return (
         // Centrar verticalmente la vista
@@ -38,30 +41,20 @@ const Main = ( {navigation} ) => {
          }  }>
             
             <View style={styles.logo}>
+                {/* show welcome and name if*/}
+                {user && <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Bienvenido {user.nombre}</Text>}
+                
                 <Logo/>
+                <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Activar Alerta!</Text>
             </View>
-            
-            <Pressable style={styles.button}> 
-                <Button 
-                    title="Inicar Sesion"
-                    color="#f5bc0c"
-                    onPress={() => navigation.navigate('Login')}
-                />
-            </Pressable>
-
-            <Pressable style={styles.button}> 
-                <Button 
-                    title="Registrarse"
-                    color="#f5bc0c"
-                    onPress={() => navigation.navigate('Register')}
-                />
-            </Pressable>
 
         </View>
     )
+
+
 }
 
-export default Main
+export default Home
 
 const styles = StyleSheet.create({
     button: {
