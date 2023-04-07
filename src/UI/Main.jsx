@@ -14,17 +14,18 @@ const Main = ( {navigation} ) => {
                 <Button 
                     title="Inicar Sesion"
                     color="#f5bc0c"
-                    onPress={() => {
-                        let response = login('olverarce01@gmail.com', '12345')
-                        console.log(response)
-                        if (response) {
-                            Alert.alert('Sesion iniciada')
-                            console.log(response)
-                        } else {
-                            Alert.alert('No se pudo iniciar sesion')
-                        }
+                    onPress={() => navigation.navigate('Autenticacion')}
+                    //onPress={() => {
+                        //let response = login('olverarce01@gmail.com', '12345')
+                        //console.log(response)
+                        //if (response) {
+                          //  Alert.alert('Sesion iniciada')
+                          //  console.log(response)
+                        //} else {
+                        //    Alert.alert('No se pudo iniciar sesion')
+                      //  }
 
-                    }}
+                    //}}
                 />
 
             </Pressable>

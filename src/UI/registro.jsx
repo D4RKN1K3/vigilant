@@ -11,26 +11,26 @@ const Registro = ( {navigation} ) => {
             Registrarse
         </Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder='Email'
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder='Contraseña'
-        keyboardType="default"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre Completo"
-        keyboardType="default"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Dirección"
-        keyboardType="default"
-      />
+        <TextInput
+            style={styles.input}
+            placeholder='Email'
+            keyboardType="email-address"
+        />
+        <TextInput
+            style={styles.input}
+            placeholder='Contraseña'
+            keyboardType="default"
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Nombre Completo"
+            keyboardType="default"
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Dirección"
+            keyboardType="default"
+        />
 
         <Button
             title="Inicio"
