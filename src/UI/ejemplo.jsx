@@ -1,22 +1,21 @@
 import React from 'react'
 import {  Text, View, Image, Button } from 'react-native'
 import Constants from 'expo-constants'
-import Botones from './botones'
-import Logo from './logo'
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
-const Main = ( {navigation} ) => {
+const Ejemplo = ( {navigation} ) => {
     return (
         <View style={ {marginTop: Constants.statusBarHeight }  }>
-            <Logo />
-            <Botones />
+            <Text>
+                Hola desde ejemplo
+            </Text>
 
             <Button
                 title="Cambiar de vista"
-                onPress={() => navigation.navigate('Ejemplo')}
+                onPress={() => navigation.navigate('Main')}
             />
         </View>
     )
 }
 
-export default Main
+export default Ejemplo
