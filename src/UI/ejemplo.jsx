@@ -12,7 +12,7 @@ const Ejemplo = ( {navigation} ) => {
 
             <Button
                 title="Cambiar de vista"
-                onPress={() => navigation.navigate('Main')}
+                onPress={() => navigation.navigate('Registro')}
             />
         </View>
     )

@@ -4,7 +4,8 @@ import Constants from 'expo-constants'
 import {login, register} from '../data/Autentication'
 
 
-const Botones = () => {
+
+const Botones = ( ) => {
     return (
         <View style={ {  }  }>
             <Pressable style={styles.button}> 
@@ -30,16 +31,18 @@ const Botones = () => {
                 <Button 
                     title="Registrarse"
                     color="#f5bc0c"
-                    onPress={() => {
-                        let response = register('test', 'test')
-                        console.log(response)
-                        if (response) {
-                            Alert.alert('Registrado')
-                            console.log(response)
-                        } else {
-                            Alert.alert('No se pudo registrar')
-                        }
-                    }}
+                    //onPress={() => navigation.navigate('Registro') // {
+                        
+                        //    let response = register('test', 'test')
+                        //  console.log(response)
+                        //  if (response) {
+                        //      Alert.alert('Registrado')
+                        //      console.log(response)
+                        //  } else {
+                        //      Alert.alert('No se pudo registrar')
+                        //  }
+                        //}
+                   // }
                 />
             </Pressable>
 

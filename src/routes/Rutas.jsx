@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // Importar las vistas que se van a utilizar
 import Main from '../UI/Main';
 import Ejemplo from '../UI/ejemplo';
+import Registro from '../UI/registro';
+import Botones from '../components/botones';
 
 export default function Rutas() {
     const Stack = createNativeStackNavigator();
@@ -15,6 +17,8 @@ export default function Rutas() {
              */}
             <Stack.Screen name="Main" component={Main} options={{ title: 'Vigilant - Alarma vecinal' }}/>
             <Stack.Screen name="Ejemplo" component={Ejemplo} options={{ title: 'Ejemplo' }}/>
+            <Stack.Screen name="Registro" component={Registro} options={{ title: 'Registro' }}/>
+            <Stack.Screen name="Botones" component={Botones} options={{ title: 'Botones' }}/>
 
         </Stack.Navigator>
     );
