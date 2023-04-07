@@ -34,7 +34,7 @@ const Main = ( {navigation} ) => {
                 <Button 
                     title="Registrarse"
                     color="#f5bc0c"
-                    onPress={() => navigation.navigate('Registro')}
+                    onPress={() => navigation.navigate('Register')}
                     //onPress={() => navigation.navigate('Registro') // {
                         
                         //    let response = register('test', 'test')
