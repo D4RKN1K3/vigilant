@@ -16,13 +16,16 @@ const Home = ( {navigation} ) => {
         
         const checkUser = async () => {
             try {
-                const user = await AsyncStorage.getItem('user');
-                setUser(user);
 
-                if (!user) {
-                    console.log('No hay usuario');
+                const user = await AsyncStorage.getItem('@user');
+                const userJson = user!=null ? JSON.parse(user) : null;
+
+                setUser(userJson);
+
+                if (!userJson) {
                     navigation.navigate('Main');
                 }
+
             } catch (error) {
                 console.log(error);
             }
@@ -31,6 +34,17 @@ const Home = ( {navigation} ) => {
         checkUser();
 
     }, []);
+
+    // LOGOUT
+    const logout = async () => {
+        try {
+            await AsyncStorage.removeItem('@user');
+            setUser(null);
+            navigation.navigate('Main');
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         // Centrar verticalmente la vista
@@ -46,6 +60,16 @@ const Home = ( {navigation} ) => {
                 
                 <Logo/>
                 <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Activar Alerta!</Text>
+
+                {/* boton logout */}
+                <Pressable style={styles.button}>
+                    <Button
+                        title="Cerrar Sesion"
+                        color="#f5bc0c"
+                        onPress={logout}
+                    />
+                </Pressable>
+
             </View>
 
         </View>

@@ -6,7 +6,10 @@ console.log(AUTHENTICATION_API_URL)
 
 // Login
 async function login( username, password ) {
-            
+    
+    console.log('username: ' + username)
+    console.log('password: ' + password)
+
     // const response = await fetch('https://backend-sistemaalertas-production.up.railway.app/login', {
     const response = await fetch(AUTHENTICATION_API_URL + '/login', {
         method: 'POST',
@@ -24,7 +27,7 @@ async function login( username, password ) {
     return data
 }
 
-async function register( username, password , name, address){
+async function register( username, password , name, address, token){
     
     // const response = await fetch('https://backend-sistemaalertas-production.up.railway.app/register', {
     const response = await fetch(AUTHENTICATION_API_URL + '/register', {
@@ -37,6 +40,7 @@ async function register( username, password , name, address){
             password,
             name,
             address,
+            token
         })
     })
     

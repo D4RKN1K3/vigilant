@@ -9,10 +9,6 @@ import { AUTHENTICATION_API_URL } from '@env';
 import SoundPlayer from 'react-native-sound-player'
 console.log(AUTHENTICATION_API_URL);
 
-
-
-
-
 export default function App() {
   
 
@@ -94,21 +90,3 @@ export default function App() {
         </>
     );
 }
-
-
-
-
-
-/*  Como definir estilos
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f2f2',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-
-});
-*/

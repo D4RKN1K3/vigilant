@@ -4,21 +4,26 @@ import Constants from 'expo-constants'
 import Botones from '../components/botones'
 import Logo from '../components/logo'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Main = ( {navigation} ) => {
 
     // Verificar si hay un usuario logeado
-    useEffect(() => {
+    useEffect( () => {
         
         const checkUser = async () => {
             try {
-                const user = await AsyncStorage.getItem('user');
-                if (user) {
+                console.log('Verificando usuario');
+                const user = await AsyncStorage.getItem('@user');
+                const userJson = user!=null ? JSON.parse(user) : null;
+                
+                setUser(userJson);
+
+                if (userJson) {
                     console.log('Hay usuario');
                     navigation.navigate('Home');
-                }                
+                }
             } catch (error) {
                 console.log(error);
             }

@@ -31,9 +31,9 @@ const Login = ( {navigation} ) => {
 		let response = await login(email, password)
 
 		// Verificar si hay error 400
-		if (response.status == 400 || response.error == 'invalid credentials') {
+		if (response.status === 400 || response.error === 'invalid credentials') {
 			console.log("Error 400");
-			setError('Usuario o contraseña incorrectos')
+			setError('Usuario o contraseña incorrectos ' + response.error)
 
 			// timeout para que el mensaje de error desaparezca
 			setTimeout(() => {
@@ -44,7 +44,7 @@ const Login = ( {navigation} ) => {
 		}
 
 		// Verificar si hay error 500
-		if (response.status == 500) {
+		if (response.status === 500) {
 			console.log("Error 500");
 			setError('Error de servidor')
 
@@ -56,7 +56,7 @@ const Login = ( {navigation} ) => {
 
 			return;
 		}
-
+        console.log("Usuario logeado")
 
 		// Crear objeto usuario
         let usuario = {
@@ -87,7 +87,7 @@ const Login = ( {navigation} ) => {
 				style={styles.input}
 				placeholder='Correo'
 				keyboardType="email-address"
-				onChange={(e) => setEmail(e.target.value)}
+				onChangeText={(text) => setEmail(text)}
 				value={email}
 			/>
 
@@ -96,7 +96,7 @@ const Login = ( {navigation} ) => {
 				placeholder='Contraseña'
 				keyboardType="default"
 				secureTextEntry={true}
-				onChange={(e) => setPassword(e.target.value)}
+				onChangeText={(text) => setPassword(text)}
 				value={password}
 			/>
 
