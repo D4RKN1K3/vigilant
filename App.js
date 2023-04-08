@@ -7,21 +7,13 @@ import {NavigationContainer} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
+import { subscribe } from './src/services/notification.js';
 
 console.log(AUTHENTICATION_API_URL)
 
 export default function App() {
 
-    // Guardar el token en el AsyncStorage
-    // const storeFMCToken = async (value) => {
-    //     try {
-    //         await AsyncStorage.setItem('@FMCtoken', value)
-    //     } catch (e) {
-    //         // saving error
-    //         console.log(e)
-    //     }
-    // }
-
+    // Guardar el token en el server 
     const requestUserPermission = async () => {
         const authStatus = await messaging().requestPermission();
         const enabled =
@@ -39,7 +31,7 @@ export default function App() {
             if( requestUserPermission() ){
                 messaging().getToken().then(token => {
                     console.log(token)
-                    // storeFMCToken(token)
+                    subscribe(token)
                 });
             }else {
                 console.log('No se pudo obtener el token', authStatus);
