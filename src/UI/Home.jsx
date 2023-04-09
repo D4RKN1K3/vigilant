@@ -124,7 +124,7 @@ const Home = ( {navigation} ) => {
                             pressed && styles.buttonPanicPressed
                         ]}
 
-                        
+                        onPress={() => sendAlert()}
                         onPressIn={() => setPressed(true)}
                         onPressOut={() => setPressed(false)}
                     >
@@ -135,19 +135,10 @@ const Home = ( {navigation} ) => {
                                 fontWeight: 'bold',
                                 textAlign: 'center'
                             }}
-                        >{"ACTIVAR"}</Text>
+                        >{"ACTIVAR ALERTA!"}</Text>
                     </Pressable>
                     
                 </View>
-                <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Activar Alerta!</Text>
-                {/* boton enviar alerta con user.token*/}
-                {user && <Pressable style={styles.button}> 
-                    <Button 
-                        title="Enviar Alerta"                            
-                        color="#f5bc0c"
-                        onPress={sendAlert}
-                    />
-                </Pressable>}
             
 
                 {/* boton logout */}
