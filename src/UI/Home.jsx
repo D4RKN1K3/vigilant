@@ -1,5 +1,8 @@
 import React, {useEffect, useState} from 'react'
-import { Text, View, Image, Button,Pressable, StyleSheet } from 'react-native'
+import { Text, View, Image, Button,Pressable, StyleSheet,
+    Touchable,
+    Hoverable,
+ } from 'react-native'
 import Constants from 'expo-constants'
 import Botones from '../components/botones'
 import Logo from '../components/logo'
@@ -10,6 +13,9 @@ const Home = ( {navigation} ) => {
 
     // USER
     const [user, setUser] = useState(null);
+    // boton de panico presionado animacion
+    const [pressed, setPressed] = useState(false);
+
 
     // Verificar si hay un usuario logeado
     useEffect(() => {
@@ -58,7 +64,34 @@ const Home = ( {navigation} ) => {
                 {/* show welcome and name if*/}
                 {user && <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Bienvenido {user.nombre}</Text>}
                 
-                <Logo/>
+                {/* Boton redondo rojo de panico con animación */}
+                <View style={{alignItems: 'center', justifyContent: 'center', marginTop: '10%', marginBottom: '10%', 
+                    height: 200
+                }}>
+
+                    <Pressable
+                        // style={pressed ? styles.buttonPanicPressed : styles.buttonPanic}
+                        // asignar estilo buttonPanic, si esta presionado heredar estilo buttonPanicPressed
+                        style={({ pressed }) => [
+                            styles.buttonPanic,
+                            pressed && styles.buttonPanicPressed
+                        ]}
+
+                        
+                        onPressIn={() => setPressed(true)}
+                        onPressOut={() => setPressed(false)}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 20,
+                                color: '#fff',
+                                fontWeight: 'bold',
+                                textAlign: 'center'
+                            }}
+                        >{"ACTIVAR"}</Text>
+                    </Pressable>
+                    
+                </View>
                 <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Activar Alerta!</Text>
 
                 {/* boton logout */}
@@ -90,5 +123,13 @@ const styles = StyleSheet.create({
     logo: {
         marginBottom: '20%',
     },
+    buttonPanicPressed : {width: 175, height: 175,backgroundColor: '#ce0a0a'},
+    buttonPanic : {alignItems: 'center', justifyContent: 'center', width: 200, height: 200, backgroundColor: '#de0909', borderRadius: 100, shadowColor: 'black', shadowOffset: {
+            width: 2,
+            height: 100,
+        }, shadowOpacity: 1, shadowRadius: 10, elevation: 10,
+    }
+
+
 });
     
