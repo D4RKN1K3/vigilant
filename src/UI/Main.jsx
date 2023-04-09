@@ -30,6 +30,8 @@ const Main = ( {navigation} ) => {
         checkUser();
 
     }, []);
+    
+
 
 
     return (

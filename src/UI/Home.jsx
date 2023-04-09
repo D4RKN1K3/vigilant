@@ -4,6 +4,7 @@ import Constants from 'expo-constants'
 import Botones from '../components/botones'
 import Logo from '../components/logo'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { newAlert } from '../services/alert.js';
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Home = ( {navigation} ) => {
@@ -34,6 +35,33 @@ const Home = ( {navigation} ) => {
         checkUser();
 
     }, []);
+    //Funcion enviar nueva alerta
+    const sendAlert = async () => {
+        try {
+
+            const user = await AsyncStorage.getItem('@user');
+            const userJson = user!=null ? JSON.parse(user) : null;
+
+            setUser(userJson);
+
+            if (!userJson) {
+                navigation.navigate('Main');
+            }
+            try {
+                console.log(userJson.token);
+                const alert = await newAlert(userJson.token);
+                console.log(alert);
+            } catch (error) {
+                console.log(error);
+            }
+
+
+        } catch (error) {
+            console.log(error);
+        }
+
+        
+    }
 
     // LOGOUT
     const logout = async () => {
@@ -60,6 +88,15 @@ const Home = ( {navigation} ) => {
                 
                 <Logo/>
                 <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Activar Alerta!</Text>
+                {/* boton enviar alerta con user.token*/}
+                {user && <Pressable style={styles.button}> 
+                    <Button 
+                        title="Enviar Alerta"                            
+                        color="#f5bc0c"
+                        onPress={sendAlert}
+                    />
+                </Pressable>}
+            
 
                 {/* boton logout */}
                 <Pressable style={styles.button}>

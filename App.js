@@ -8,6 +8,7 @@ import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import { subscribe } from './src/services/notification.js';
+import { playAlarm } from './src/services/playAlarm.js';
 
 console.log(AUTHENTICATION_API_URL)
 
@@ -30,7 +31,7 @@ export default function App() {
         useEffect(() => {
             if( requestUserPermission() ){
                 messaging().getToken().then(token => {
-                    console.log(token)
+                    console.log("suscribiendo: " + token)
                     subscribe(token)
                 });
             }else {
@@ -64,18 +65,12 @@ export default function App() {
             // Register background handler
             messaging().setBackgroundMessageHandler(async remoteMessage => {            
                 console.log('Message handled in the background!', remoteMessage);
-                try {
-                    // play the file in the file system (sound.mp3)
-                    SoundPlayer.playSoundFile('alarm', 'mp3')
-                        
-                } catch (e) {
-                    console.log(`cannot play the sound file`, e)
-                }
             });
 
             // Register foreground handler
             const unsubscribe = messaging().onMessage(async remoteMessage => {
-                Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+                Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
+                await playAlarm();
             });
         
             return unsubscribe;
