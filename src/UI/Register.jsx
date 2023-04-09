@@ -82,7 +82,7 @@ const Registro = ( {navigation} ) => {
         storeUser(usuario)
 
         // Cambiar de vista a Main
-        navigation.navigate('Main')
+        navigation.navigate('Home')
     }
 
 

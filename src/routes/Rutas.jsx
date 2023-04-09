@@ -16,6 +16,7 @@ export default function Rutas() {
                 component: Nombre del componente que se va a renderizar, el mismo que le ponemos al importarlo.
                 options: Opciones de la vista, como el titulo de la barra de navegacion, el color de fondo, etc. 
              */}
+
             <Stack.Screen name="Home" component={Home} options={{ title: 'Vigilant - Alarma vecinal'}}/>
             <Stack.Screen name="Main" component={Main} options={{ title: 'Vigilant - Alarma vecinal', headerShown: false }}/>
             <Stack.Screen name="Ejemplo" component={Ejemplo} options={{ title: 'Ejemplo' }}/>

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import { StyleSheet, Text, View , Image,Button, Alert, Pressable, Platform } from 'react-native';
+import { StyleSheet, Text, View , Image,Button, Alert, Pressable, Platform, BackHandler} from 'react-native';
 import Rutas from './src/routes/Rutas.jsx'; // Importamos las rutas
 import { AUTHENTICATION_API_URL } from '@env';
 import {NavigationContainer} from '@react-navigation/native';
@@ -74,6 +74,7 @@ export default function App() {
             });
         
             return unsubscribe;
+                
     
         }, []);
 
