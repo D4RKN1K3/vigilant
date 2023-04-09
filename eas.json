@@ -11,10 +11,22 @@
       }
     },
     "preview": {
+      "android": {
+        "buildType": "apk"
+      },
       "distribution": "internal",
       "ios": {
         "resourceClass": "m-medium"
       }
+    },
+    "preview2": {
+      "android": {
+        "gradleCommand": "app:assembleRelease"
+      }
+    },
+    "preview3": {
+      "developmentClient": true
+      
     },
     "production": {
       "ios": {

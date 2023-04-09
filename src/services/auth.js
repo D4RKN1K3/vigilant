@@ -3,7 +3,6 @@
 import { AUTHENTICATION_API_URL } from '@env'
 console.log(AUTHENTICATION_API_URL)
 
-
 // Login
 async function login( username, password ) {
     
@@ -23,6 +22,7 @@ async function login( username, password ) {
     })
     
     const data = await response.json()
+    console.log(data)
 
     return data
 }
@@ -45,7 +45,7 @@ async function register( username, password , name, address, token){
     })
     
     const data = await response.json()
-    
+
     return data
 }
 

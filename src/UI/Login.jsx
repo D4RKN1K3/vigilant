@@ -3,9 +3,7 @@ import {SafeAreaView, StyleSheet, TextInput,Button, Text, View, Pressable } from
 import { login } from '../services/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
-
 const Login = ( {navigation} ) => {
 
 	// Crear variables de estado para guardar los datos ingresados en los inputs
@@ -71,7 +69,7 @@ const Login = ( {navigation} ) => {
         storeUser(usuario)
 		
 		// Cambiar de vista a Main
-		navigation.navigate('Main')
+		navigation.navigate('Home')
 	}
 
 	return (

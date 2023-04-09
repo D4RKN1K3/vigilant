@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react'
-import { Text, View, Image, Button,Pressable, StyleSheet,
-    Touchable,
-    Hoverable,
- } from 'react-native'
+import { Text, View, Image, Button,Pressable, StyleSheet,BackHandler, Alert } from 'react-native'
 import Constants from 'expo-constants'
 import Botones from '../components/botones'
 import Logo from '../components/logo'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { newAlert } from '../services/alert.js';
+import { useIsFocused } from "@react-navigation/native";
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Home = ( {navigation} ) => {
@@ -15,12 +14,14 @@ const Home = ( {navigation} ) => {
     const [user, setUser] = useState(null);
     // boton de panico presionado animacion
     const [pressed, setPressed] = useState(false);
-
+    // Verificar si la vista esta enfocada
+    const isFocused = useIsFocused();
 
     // Verificar si hay un usuario logeado
     useEffect(() => {
         
         const checkUser = async () => {
+            console.log("se verifica usuario en home")
             try {
 
                 const user = await AsyncStorage.getItem('@user');
@@ -39,7 +40,53 @@ const Home = ( {navigation} ) => {
         
         checkUser();
 
-    }, []);
+        const backAction = () => {
+            if (navigation.isFocused()) {
+                Alert.alert("¡Espera!", "¿Estás seguro que quieres cerrar sesión?", [
+                {
+                  text: "Cancelar",
+                  onPress: () => null,
+                  style: "cancel"
+                },
+                { text: "Sí", onPress: () => logout() }
+              ]);
+              return true;
+            }
+          };
+          
+        const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+        );
+
+    }, [isFocused]);
+    //Funcion enviar nueva alerta
+    const sendAlert = async () => {
+        try {
+
+            const user = await AsyncStorage.getItem('@user');
+            const userJson = user!=null ? JSON.parse(user) : null;
+
+            setUser(userJson);
+
+            if (!userJson) {
+                navigation.navigate('Main');
+            }
+            try {
+                console.log(userJson.token);
+                const alert = await newAlert(userJson.token);
+                console.log(alert);
+            } catch (error) {
+                console.log(error);
+            }
+
+
+        } catch (error) {
+            console.log(error);
+        }
+
+        
+    }
 
     // LOGOUT
     const logout = async () => {
@@ -93,6 +140,15 @@ const Home = ( {navigation} ) => {
                     
                 </View>
                 <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Activar Alerta!</Text>
+                {/* boton enviar alerta con user.token*/}
+                {user && <Pressable style={styles.button}> 
+                    <Button 
+                        title="Enviar Alerta"                            
+                        color="#f5bc0c"
+                        onPress={sendAlert}
+                    />
+                </Pressable>}
+            
 
                 {/* boton logout */}
                 <Pressable style={styles.button}>

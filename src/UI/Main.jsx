@@ -17,13 +17,11 @@ const Main = ( {navigation} ) => {
                 console.log('Verificando usuario');
                 const user = await AsyncStorage.getItem('@user');
                 const userJson = user!=null ? JSON.parse(user) : null;
-                
-                setUser(userJson);
 
                 if (userJson) {
-                    console.log('Hay usuario');
                     navigation.navigate('Home');
                 }
+                
             } catch (error) {
                 console.log(error);
             }
@@ -32,6 +30,8 @@ const Main = ( {navigation} ) => {
         checkUser();
 
     }, []);
+    
+
 
 
     return (

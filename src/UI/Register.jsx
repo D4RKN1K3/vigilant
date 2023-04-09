@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {SafeAreaView, StyleSheet, TextInput,Button, Text, View, Pressable} from 'react-native';
 import {register} from '../services/auth';
+import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
@@ -14,6 +15,7 @@ const Registro = ( {navigation} ) => {
     const [direccion, setDireccion] = useState('');
     // error message
     const [error, setError] = useState('');
+    const [FCMToken, setFCMToken] = useState('');
     
     async function storeUser(value) {
         try {
@@ -22,6 +24,18 @@ const Registro = ( {navigation} ) => {
         } catch (e) {
             // saving error
             console.log(e)
+        }
+    }
+
+    // get FCM token from firebase
+    async function getFCMToken() {
+        try {
+            const token = await messaging().getToken();
+            setFCMToken(token);
+            console.log("FCM token: ", token);
+        } catch (e) {
+            console.log(e)
+            setFCMToken('');
         }
     }
 
@@ -68,7 +82,7 @@ const Registro = ( {navigation} ) => {
         storeUser(usuario)
 
         // Cambiar de vista a Main
-        navigation.navigate('Main')
+        navigation.navigate('Home')
     }
 
 
