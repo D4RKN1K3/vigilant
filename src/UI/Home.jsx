@@ -98,6 +98,11 @@ const Home = ( {navigation} ) => {
             console.log(error);
         }
     }
+    // Alertas
+    const verAlertas = async () => {
+        navigation.navigate('Alertas');
+ 
+    }
 
     return (
         // Centrar verticalmente la vista
@@ -147,6 +152,13 @@ const Home = ( {navigation} ) => {
                         title="Cerrar Sesion"
                         color="#f5bc0c"
                         onPress={logout}
+                    />
+                </Pressable>
+                <Pressable style={styles.button}>
+                    <Button
+                        title="Alertas"
+                        color="#f5bc0c"
+                        onPress={verAlertas}
                     />
                 </Pressable>
 

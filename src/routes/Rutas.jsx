@@ -6,6 +6,7 @@ import Main from '../UI/Main';
 import Ejemplo from '../UI/ejemplo';
 import Register from '../UI/Register';
 import Login from '../UI/Login';
+import Alertas from '../UI/Alertas'
 
 export default function Rutas() {
     const Stack = createNativeStackNavigator();
@@ -21,6 +22,7 @@ export default function Rutas() {
             <Stack.Screen name="Main" component={Main} options={{ title: 'Vigilant - Alarma vecinal', headerShown: false }}/>
             <Stack.Screen name="Ejemplo" component={Ejemplo} options={{ title: 'Ejemplo' }}/>
             <Stack.Screen name="Register" component={Register} options={{ title: 'Registro' }}/>
+            <Stack.Screen name="Alertas" component={Alertas} options={{ title: 'Mis Alertas' }}/>
             <Stack.Screen name="Login" component={Login} options={{ title: 'Inicio de sesion' }}/>
         </Stack.Navigator>
     );
