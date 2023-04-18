@@ -22,8 +22,8 @@ export default function Rutas() {
             <Stack.Screen name="Main" component={Main} options={{ title: 'Vigilant - Alarma vecinal', headerShown: false }}/>
             <Stack.Screen name="Ejemplo" component={Ejemplo} options={{ title: 'Ejemplo' }}/>
             <Stack.Screen name="Register" component={Register} options={{ title: 'Registro' }}/>
-            <Stack.Screen name="Alertas" component={Alertas} options={{ title: 'Mis Alertas' }}/>
             <Stack.Screen name="Login" component={Login} options={{ title: 'Inicio de sesion' }}/>
+            <Stack.Screen name="Alertas" component={Alertas} options={{ title: 'Vigilant - Últimas alertas' }}/>
         </Stack.Navigator>
     );
 }
