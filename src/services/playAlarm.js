@@ -8,5 +8,4 @@ const playAlarm = async () => {
     await sound.playAsync();
 }
 
-
 export {playAlarm};

@@ -11,6 +11,8 @@ const Alerta = (props) => {
     return (
       <View style={styles.container}>
         <View style={styles.dateContainer}>
+          {/* circle */}
+          <View style={styles.alertDot}></View>
           <Text>{props.fecha}</Text>
         </View>
         <View style={styles.emisorContainer}>
@@ -23,27 +25,35 @@ const Alerta = (props) => {
 // stylesheet
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        display: 'grid',
-        gridTemplateColumns: '1fr 2fr',
-        justifyContent: 'center',
-        paddingTop: Constants.statusBarHeight,
+        // gridTemplateColumns: '1fr 3fr',
+        flexDirection: 'row',
+        // justifyContent: 'center',
+        paddingTop: Constants.statusBarHeight + 20,
         backgroundColor: '#fff',
-        paddingTop: 20,
         paddingBottom: 20,
         marginBottom: 10,
         marginRight: 20,
     },
     dateContainer: {
         textAlign: 'center',
-        // borde derecha gris
         borderRightColor: '#666',
         borderRightWidth: 1,
-        paddingLeft: 10,
+        paddingLeft: 30,
         paddingRight: 10,
+        position: 'relative',
+        width: 130,
     },
     emisorContainer: {
         paddingLeft: 10,
+    },
+    alertDot: {
+        width: 20, 
+        height: 20, 
+        borderRadius: 10, 
+        backgroundColor: 'orange', 
+        marginBottom: 10,
+        position: 'absolute',
+        left: -10,
     },
     emisorText: {
         fontSize: 18,
@@ -51,8 +61,7 @@ const styles = StyleSheet.create({
     },
     direccionText: {
         fontSize: 16,
-        // color de texto gris oscuro
-        color: '#666',
+        color: '#333',
     },
 });
 

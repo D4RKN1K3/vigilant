@@ -6,6 +6,7 @@ import Logo from '../components/logo'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { newAlert } from '../services/alert.js';
 import { useIsFocused } from "@react-navigation/native";
+import {getUser} from '../services/auth.js';
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Home = ( {navigation} ) => {
@@ -19,27 +20,14 @@ const Home = ( {navigation} ) => {
 
     // Verificar si hay un usuario logeado
     useEffect(() => {
-        
-        const checkUser = async () => {
-            console.log("se verifica usuario en home")
-            try {
 
-                const user = await AsyncStorage.getItem('@user');
-                const userJson = user!=null ? JSON.parse(user) : null;
-
-                setUser(userJson);
-
-                if (!userJson) {
-                    navigation.navigate('Main');
-                }
-
-            } catch (error) {
-                console.log(error);
-            }
+        const getUserFromApi = async () => {
+            const user = await getUser();
+            setUser(user);
+            
         }
+        getUserFromApi();
         
-        checkUser();
-
         const backAction = () => {
             if (navigation.isFocused()) {
                 Alert.alert("¡Espera!", "¿Estás seguro que quieres cerrar sesión?", [
@@ -52,7 +40,7 @@ const Home = ( {navigation} ) => {
               ]);
               return true;
             }
-          };
+        };
           
         const backHandler = BackHandler.addEventListener(
         "hardwareBackPress",
@@ -185,7 +173,7 @@ const styles = StyleSheet.create({
     buttonPanicPressed : {width: 175, height: 175,backgroundColor: '#ce0a0a'},
     buttonPanic : {alignItems: 'center', justifyContent: 'center', width: 200, height: 200, backgroundColor: '#de0909', borderRadius: 100, shadowColor: 'black', shadowOffset: {
             width: 2,
-            height: 100,
+            height: 5,
         }, shadowOpacity: 1, shadowRadius: 10, elevation: 10,
     }
 

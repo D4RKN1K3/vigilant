@@ -6,13 +6,15 @@ import { AUTHENTICATION_API_URL } from '@env';
 import {NavigationContainer} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { subscribe } from './src/services/notification.js';
 import { playAlarm } from './src/services/playAlarm.js';
 
 console.log(AUTHENTICATION_API_URL)
 
 export default function App() {
+
+    const [playingSound, setPlayingSound] = useState(false);
 
     // Guardar el token en el server 
     const requestUserPermission = async () => {
@@ -49,8 +51,6 @@ export default function App() {
                     );
                     setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
                     }
-                    //el siguiente codigo 
-                    setLoading(false);
                 }
             );
 
@@ -70,7 +70,15 @@ export default function App() {
             // Register foreground handler
             const unsubscribe = messaging().onMessage(async remoteMessage => {
                 Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
+                if (playingSound) {
+                    return;
+                }
                 await playAlarm();
+                setPlayingSound(true);
+                // restart after 5 seconds
+                setTimeout(() => {
+                    setPlayingSound(false);
+                }, 5000);
             });
         
             return unsubscribe;

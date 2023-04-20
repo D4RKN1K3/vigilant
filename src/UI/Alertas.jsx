@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react'
-import {SafeAreaView, StyleSheet, TextInput,Button, Text, View, Pressable} from 'react-native';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ScrollView,SafeAreaView, StyleSheet, TextInput,Button, Text, View, Pressable} from 'react-native';
 import Alerta from '../components/alerta';
+import { getAlerts } from '../services/alert.js';
+import { getUser } from '../services/auth.js';
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 
 const Alertas = ( {navigation} ) => {
   const [alerts,setAlerts] = useState([]);
+  const [usuario,setUsuario] = useState({});
 
   let alertas = [
     {
@@ -73,40 +74,55 @@ const Alertas = ( {navigation} ) => {
   ];
 
   useEffect(()=>{
-    //getAlerts();
-  },[])
+    const getAlertsFromApi = async () => {
+      const user = await getUser();
+      setUsuario(user);
+      console.log(user);
+      const alerts = await getAlerts(user.token);
+      setAlerts(alerts);
+    }
+    getAlertsFromApi();
 
-  const getAlerts = () =>{
-    AsyncStorage.getItem('@user')
-    .then(response=>{
-      const token = JSON.parse(response).token;
-      if(token){
-        axios({
-          method: 'get',
-          url: 'https://backend-sistemaalertas-production.up.railway.app/alerts',
-          headers: {
-            'Authorization': 'Bearer '+token
-          }
-        })
-        .then((response)=>{
-          const data = response.data;
-          setAlerts(data);
-        });
-      }  
-    })
-  }
+    console.log('Alertas');
+    console.log(alerts);
+
+  },[]);
 
   const listarAlertas = () => {
+    // return <View style={{borderLeftColor: 'orange',borderLeftWidth: 4, marginLeft: 10, marginTop: 10}}>
+    //   {alerts.map(alert=>{
+    //     let id = alert._id;
+    //     let fecha = new Date(alert.date).toLocaleString();
+    //     let nombreEmisor = alert.name;
+    //     let direccion = alert.address;
+
+    //     return <Alerta key={id} fecha={fecha} emisor={nombreEmisor} direccion={direccion}/>
+    //   })}
+    // </View>
+    // Verificar si hay alertas
+    if(alerts.length === 0){
+      return <Text>No hay alertas</Text>
+    }
     return <View style={{borderLeftColor: 'orange',borderLeftWidth: 4, marginLeft: 10, marginTop: 10}}>
-      {alertas.map(alerta=>{
-        return <Alerta key={alerta.id} fecha={alerta.fecha} emisor={alerta.emisor} direccion={alerta.direccion}/>
-      })}
+      {alerts.reverse().map(alert=>{
+        let id = alert._id;
+        let fecha = new Date(alert.date).toLocaleString();
+        let nombreEmisor = alert.name;
+        let direccion = alert.address;
+
+        return <Alerta key={id} fecha={fecha} emisor={nombreEmisor} direccion={direccion}/>
+      }
+      )}
     </View>
+
   }
 
 return (
     <SafeAreaView>
-      {listarAlertas()}
+      <ScrollView>
+        {listarAlertas()}
+        
+      </ScrollView>
     </SafeAreaView>
   );
   // <View>

@@ -1,6 +1,8 @@
 // React native - Expo
 // import env
 import { AUTHENTICATION_API_URL } from '@env'
+import { useNavigation } from '@react-navigation/native' 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 console.log(AUTHENTICATION_API_URL)
 
 // Login
@@ -49,4 +51,32 @@ async function register( username, password , name, address, token){
     return data
 }
 
-export { login , register}
+async function getUser() {
+    console.log("se verifica usuario en home")
+    try {
+
+        const user = await AsyncStorage.getItem('@user');
+        //parse user to json
+        const userJson = user!=null ? JSON.parse(user) : null;
+        return userJson;
+
+    } catch (error) {
+        console.log(error);
+    }
+    return null;
+}
+
+// getToken
+async function getToken() {
+    try {
+        const user = await AsyncStorage.getItem('@user');
+        const userJson = user!=null ? JSON.parse(user) : null;
+        console.log("desdetoken:"+userJson);
+        return userJson.token;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export { login , register, getUser, getToken}
