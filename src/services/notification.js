@@ -4,6 +4,7 @@ import { AUTHENTICATION_API_URL } from '@env'
 async function subscribe( token ) {
         
     console.log('token: ' + token)
+    console.log('AUTHENTICATION_API_URL: ' + AUTHENTICATION_API_URL + '/suscribe')
 
     const response = await fetch(AUTHENTICATION_API_URL + '/suscribe', {
         method: 'POST',

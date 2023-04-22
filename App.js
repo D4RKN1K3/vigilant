@@ -9,12 +9,34 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { subscribe } from './src/services/notification.js';
 import { playAlarm } from './src/services/playAlarm.js';
+import { Audio } from 'expo-av';
+import sonidoAlarma from './assets/sounds/alarm.mp3';
+
 
 console.log(AUTHENTICATION_API_URL)
 
 export default function App() {
 
-    const [playingSound, setPlayingSound] = useState(false);
+    const [sound, setSound] = useState();
+    console.log("SONIDOO: ",sonidoAlarma)
+    // useEffect sound
+    const playSound = async () => {
+        // if (sound) {
+        //     console.log('Unloading Sound');
+        //     await sound.stopAsync();
+        //     setSound(null);
+        // }
+
+        const { newSound } = await Audio.Sound.createAsync(
+            sonidoAlarma
+        );
+
+        console.log('Playing Sound');
+        newSound.playAsync();
+
+        setSound(newSound);
+        console.log("SONIDOO: ",newSound)
+    }
 
     // Guardar el token en el server 
     const requestUserPermission = async () => {
@@ -70,15 +92,8 @@ export default function App() {
             // Register foreground handler
             const unsubscribe = messaging().onMessage(async remoteMessage => {
                 Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
-                if (playingSound) {
-                    return;
-                }
-                await playAlarm();
-                setPlayingSound(true);
-                // restart after 5 seconds
-                setTimeout(() => {
-                    setPlayingSound(false);
-                }, 5000);
+                await playSound();
+                
             });
         
             return unsubscribe;

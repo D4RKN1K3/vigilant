@@ -2,7 +2,9 @@ import { AUTHENTICATION_API_URL } from '@env'
 
 // Alert
 async function newAlert( authToken ) {
-        
+    
+    console.log('AUTHENTICATION_API_URL: ' + AUTHENTICATION_API_URL + '/alerts/new')
+
     const response = await fetch(AUTHENTICATION_API_URL + '/alerts/new', {
         method: 'POST',
         headers: {

@@ -18,6 +18,7 @@ const Home = ( {navigation} ) => {
     // Verificar si la vista esta enfocada
     const isFocused = useIsFocused();
 
+
     // Verificar si hay un usuario logeado
     useEffect(() => {
 

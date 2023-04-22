@@ -5,7 +5,8 @@ const playAlarm = async () => {
     console.log('Loading Sound');
     const { sound } = await Audio.Sound.createAsync( sonidoAlarma );
     console.log('Playing Sound');
-    await sound.playAsync();
+    sound.playAsync();
+    return sound;
 }
 
 export {playAlarm};

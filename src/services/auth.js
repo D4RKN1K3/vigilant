@@ -3,13 +3,13 @@
 import { AUTHENTICATION_API_URL } from '@env'
 import { useNavigation } from '@react-navigation/native' 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-console.log(AUTHENTICATION_API_URL)
 
 // Login
 async function login( username, password ) {
     
     console.log('username: ' + username)
     console.log('password: ' + password)
+    console.log('AUTHENTICATION_API_URL: ' + AUTHENTICATION_API_URL + '/login')
 
     // const response = await fetch('https://backend-sistemaalertas-production.up.railway.app/login', {
     const response = await fetch(AUTHENTICATION_API_URL + '/login', {
@@ -31,7 +31,8 @@ async function login( username, password ) {
 
 async function register( username, password , name, address, token){
     
-    // const response = await fetch('https://backend-sistemaalertas-production.up.railway.app/register', {
+    console.log('AUTHENTICATION_API_URL: ' + AUTHENTICATION_API_URL + '/register')
+    
     const response = await fetch(AUTHENTICATION_API_URL + '/register', {
         method: 'POST',
         headers: {
