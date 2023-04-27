@@ -85,7 +85,7 @@ const Login = ( {navigation} ) => {
 				style={styles.input}
 				placeholder='Correo'
 				keyboardType="email-address"
-				onChangeText={(text) => setEmail(text)}
+				onChangeText={(text) => setEmail(text.toLowerCase())}
 				value={email}
 			/>
 

@@ -6,37 +6,13 @@ import { AUTHENTICATION_API_URL } from '@env';
 import {NavigationContainer} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { subscribe } from './src/services/notification.js';
 import { playAlarm } from './src/services/playAlarm.js';
-import { Audio } from 'expo-av';
-import sonidoAlarma from './assets/sounds/alarm.mp3';
-
-
-console.log(AUTHENTICATION_API_URL)
 
 export default function App() {
-
-    const [sound, setSound] = useState();
-    console.log("SONIDOO: ",sonidoAlarma)
-    // useEffect sound
-    const playSound = async () => {
-        // if (sound) {
-        //     console.log('Unloading Sound');
-        //     await sound.stopAsync();
-        //     setSound(null);
-        // }
-
-        const { newSound } = await Audio.Sound.createAsync(
-            sonidoAlarma
-        );
-
-        console.log('Playing Sound');
-        newSound.playAsync();
-
-        setSound(newSound);
-        console.log("SONIDOO: ",newSound)
-    }
+    // sound alarm
+    const [soundAlarm, setSoundAlarm] = useState(null);
 
     // Guardar el token en el server 
     const requestUserPermission = async () => {
@@ -91,8 +67,10 @@ export default function App() {
 
             // Register foreground handler
             const unsubscribe = messaging().onMessage(async remoteMessage => {
-                Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
-                await playSound();
+                alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+                
+                // Reproducir el sonido
+                playAlarm( soundAlarm, setSoundAlarm )
                 
             });
         

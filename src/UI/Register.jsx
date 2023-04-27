@@ -85,7 +85,6 @@ const Registro = ( {navigation} ) => {
         navigation.navigate('Home')
     }
 
-
     return (
         <SafeAreaView style={styles.container}>
 
@@ -99,7 +98,7 @@ const Registro = ( {navigation} ) => {
                 style={styles.input}
                 placeholder='Email'
                 keyboardType="email-address"
-                onChangeText={text => setEmail(text)}
+                onChangeText={text => setEmail( text.toLowerCase() )}
                 value={email}
             />
             <TextInput

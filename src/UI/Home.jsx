@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { newAlert } from '../services/alert.js';
 import { useIsFocused } from "@react-navigation/native";
 import {getUser} from '../services/auth.js';
+import { playAlarm } from '../services/playAlarm.js';
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Home = ( {navigation} ) => {
@@ -17,6 +18,8 @@ const Home = ( {navigation} ) => {
     const [pressed, setPressed] = useState(false);
     // Verificar si la vista esta enfocada
     const isFocused = useIsFocused();
+    // sound alarm
+    const [soundAlarm, setSoundAlarm] = useState(null);
 
 
     // Verificar si hay un usuario logeado
@@ -118,7 +121,11 @@ const Home = ( {navigation} ) => {
                             pressed && styles.buttonPanicPressed
                         ]}
 
-                        onPress={() => sendAlert()}
+                        // onPress={() => sendAlert()}
+                        onPress={() => playAlarm(
+                            soundAlarm,
+                            setSoundAlarm,
+                        )}
                         onPressIn={() => setPressed(true)}
                         onPressOut={() => setPressed(false)}
                     >

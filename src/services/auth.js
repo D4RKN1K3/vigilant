@@ -7,10 +7,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Login
 async function login( username, password ) {
     
-    console.log('username: ' + username)
-    console.log('password: ' + password)
-    console.log('AUTHENTICATION_API_URL: ' + AUTHENTICATION_API_URL + '/login')
-
     // const response = await fetch('https://backend-sistemaalertas-production.up.railway.app/login', {
     const response = await fetch(AUTHENTICATION_API_URL + '/login', {
         method: 'POST',
