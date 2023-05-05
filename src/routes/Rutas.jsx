@@ -7,6 +7,20 @@ import Ejemplo from '../UI/ejemplo';
 import Register from '../UI/Register';
 import Login from '../UI/Login';
 import Alertas from '../UI/Alertas'
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+// Crear la función del navigation drawer
+function HomeDrawer() {
+    const Drawer = createDrawerNavigator();
+    return (
+        <Drawer.Navigator>
+            {/* cambiar este component por Home una vez este el server funcionando */}
+            <Drawer.Screen name="Home" component={Main} options={{ title: 'Vigilant - Alarma vecinal'}}/>
+            <Drawer.Screen name="Ejemplo" component={Ejemplo} />
+            <Drawer.Screen name="Alertas" component={Alertas} options={{ title: 'Vigilant - Últimas alertas' }}/>
+        </Drawer.Navigator>
+    );
+}
 
 export default function Rutas() {
     const Stack = createNativeStackNavigator();
@@ -18,12 +32,11 @@ export default function Rutas() {
                 options: Opciones de la vista, como el titulo de la barra de navegacion, el color de fondo, etc. 
              */}
 
-            <Stack.Screen name="Home" component={Home} options={{ title: 'Vigilant - Alarma vecinal'}}/>
+            <Stack.Screen name="HomeDrawer" component={HomeDrawer} options={{ title: 'Vigilant - Alarma vecinal', headerShown: false}}/>
             <Stack.Screen name="Main" component={Main} options={{ title: 'Vigilant - Alarma vecinal', headerShown: false }}/>
             <Stack.Screen name="Ejemplo" component={Ejemplo} options={{ title: 'Ejemplo' }}/>
             <Stack.Screen name="Register" component={Register} options={{ title: 'Registro' }}/>
             <Stack.Screen name="Login" component={Login} options={{ title: 'Inicio de sesion' }}/>
-            <Stack.Screen name="Alertas" component={Alertas} options={{ title: 'Vigilant - Últimas alertas' }}/>
         </Stack.Navigator>
     );
 }

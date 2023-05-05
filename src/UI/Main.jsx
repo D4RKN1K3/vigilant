@@ -36,16 +36,16 @@ const Main = ( {navigation} ) => {
             if (navigation.isFocused()) {
                 Alert.alert("¡Espera!", "¿Estás seguro que salir?", [
                 {
-                  text: "Cancelar",
-                  onPress: () => null,
-                  style: "cancel"
-                },
-                { text: "Sí", onPress: () => BackHandler.exitApp() }
-              ]);
-              return true;
-            }
-          };
-          
+                    text: "Cancelar",
+                    onPress: () => null,
+                    style: "cancel"
+                    },
+                    { text: "Sí", onPress: () => BackHandler.exitApp() }
+                ]);
+                return true;
+                }
+            };
+        
         const backHandler = BackHandler.addEventListener(
         "hardwareBackPress",
         backAction
@@ -62,7 +62,7 @@ const Main = ( {navigation} ) => {
             flex: 1,
             flexDirection: 'column',
             justifyContent: 'center',
-         }  }>
+        } }>
             
             <View style={styles.logo}>
                 <Logo/>
@@ -70,7 +70,7 @@ const Main = ( {navigation} ) => {
             
             <Pressable style={styles.button}> 
                 <Button 
-                    title="Inicar Sesion"
+                    title="Iniciar Sesion"
                     color="#f5bc0c"
                     onPress={() => navigation.navigate('Login')}
                 />
