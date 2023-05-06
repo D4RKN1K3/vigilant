@@ -1,9 +1,9 @@
-import { AUTHENTICATION_API_URL } from '@env'
+import { BACKEND_URL } from '@env'
 
 // Subscribe
 async function subscribe( token ) {
 
-    const response = await fetch(AUTHENTICATION_API_URL + '/suscribe', {
+    const response = await fetch(BACKEND_URL + '/suscribe', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -2,7 +2,7 @@ import { BACKEND_URL } from '@env'
 
 // Alert
 async function newAlert( authToken ) {
-    
+    console.log("obteniendo alertas desde: "+BACKEND_URL + '/alerts')
     const response = await fetch(BACKEND_URL + '/alerts/new', {
         method: 'POST',
         headers: {
