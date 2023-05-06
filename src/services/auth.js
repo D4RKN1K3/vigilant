@@ -1,14 +1,15 @@
 // React native - Expo
 // import env
-import { AUTHENTICATION_API_URL } from '@env'
+import { BACKEND_URL, AUTH_URL, AUTH_KEY } from '@env'
 import { useNavigation } from '@react-navigation/native' 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwtDecode from 'jwt-decode';
 
 // Login
 async function login( username, password ) {
     
-    // const response = await fetch('https://backend-sistemaalertas-production.up.railway.app/login', {
-    const response = await fetch(AUTHENTICATION_API_URL + '/login', {
+    
+    const response = await fetch(AUTH_URL + '/credentials', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -20,16 +21,20 @@ async function login( username, password ) {
     })
     
     const data = await response.json()
-    console.log(data)
+    if (data.errors){
+        return data
+    }
 
-    return data
+    // Desencriptar data
+    const paquete = jwtDecode(data);
+    return paquete
 }
 
 async function register( username, password , name, address, token){
     
-    console.log('AUTHENTICATION_API_URL: ' + AUTHENTICATION_API_URL + '/register')
+    console.log('AUTHENTICATION_API_URL: ' + BACKEND_URL + '/register')
     
-    const response = await fetch(AUTHENTICATION_API_URL + '/register', {
+    const response = await fetch(BACKEND_URL + '/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -51,12 +56,10 @@ async function register( username, password , name, address, token){
 async function getUser() {
     console.log("se verifica usuario en home")
     try {
-
         const user = await AsyncStorage.getItem('@user');
         //parse user to json
         const userJson = user!=null ? JSON.parse(user) : null;
         return userJson;
-
     } catch (error) {
         console.log(error);
     }
@@ -70,7 +73,6 @@ async function getToken() {
         const userJson = user!=null ? JSON.parse(user) : null;
         console.log("desdetoken:"+userJson);
         return userJson.token;
-
     } catch (error) {
         console.log(error);
     }

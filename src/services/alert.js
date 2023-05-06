@@ -1,9 +1,9 @@
-import { AUTHENTICATION_API_URL } from '@env'
+import { BACKEND_URL } from '@env'
 
 // Alert
 async function newAlert( authToken ) {
     
-    const response = await fetch(AUTHENTICATION_API_URL + '/alerts/new', {
+    const response = await fetch(BACKEND_URL + '/alerts/new', {
         method: 'POST',
         headers: {
             Authorization: "Bearer " + authToken.toString()
@@ -17,9 +17,9 @@ async function newAlert( authToken ) {
 }
 
 async function getAlerts( authToken ) {
-
+    console.log("obteniendo alertas desde: "+BACKEND_URL + '/alerts')
     try {
-        const response = await fetch(AUTHENTICATION_API_URL + '/alerts', {
+        const response = await fetch(BACKEND_URL + '/alerts', {
             method: 'GET',
             headers: {
                 Authorization: "Bearer " + authToken.toString()

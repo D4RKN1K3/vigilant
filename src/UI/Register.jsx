@@ -45,17 +45,19 @@ const Registro = ( {navigation} ) => {
 
         console.log(response)
 
-        // Verificar si hay error 400
-        if (response.status == 400 || response.error == 'faltan datos') {
-            
-            // error mesaje
-            let errorMessage = "Faltan datos:"
+        // Verificar si hay errores
+        if (response.errors) {
+            console.log("Error 403 o hay errores");
+            console.log(response);
+
+            // error mensaje
+            let errorMessage = "Hay algunos errores:";
 
             // Obtener errores
-            let errores = response.datosFaltantes;
+            let errores = response.errors;
 
             for (let i = 0; i < errores.length; i++) {
-                errorMessage += " " + errores[i];
+                errorMessage += "\nEl campo " + errores[i].path + " "+ errores[i].msg.toLowerCase();
             }
 
             // Mostrar error
@@ -65,10 +67,15 @@ const Registro = ( {navigation} ) => {
             setTimeout(() => {
                 setError('')
             }
-            , 3000);
+            , 3000*errores.length);
 
             return;
         }
+
+        console.log("Usuario registrado exitosamente")
+
+        // Login
+
 
         // Crear objeto usuario
         let usuario = {
@@ -79,7 +86,7 @@ const Registro = ( {navigation} ) => {
             token: response.token
         }
         // Guardar el usuario en el AsyncStorage
-        storeUser(usuario)
+        // storeUser(usuario)
 
         // Cambiar de vista a Main
         navigation.navigate('Home')

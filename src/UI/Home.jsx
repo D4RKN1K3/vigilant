@@ -58,6 +58,7 @@ const Home = ( {navigation} ) => {
 
             const user = await AsyncStorage.getItem('@user');
             const userJson = user!=null ? JSON.parse(user) : null;
+            console.log("verificando usuario desde home");
 
             setUser(userJson);
 

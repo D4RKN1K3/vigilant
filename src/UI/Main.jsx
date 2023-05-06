@@ -23,6 +23,10 @@ const Main = ( {navigation} ) => {
                 const userJson = user!=null ? JSON.parse(user) : null;
 
                 if (userJson) {
+                    console.log('Usuario encontrado');
+                    console.log(userJson);
+                    // remover usuario
+                    // await AsyncStorage.removeItem('@user');
                     navigation.navigate('Home');
                 }
                 

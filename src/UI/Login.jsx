@@ -27,44 +27,41 @@ const Login = ( {navigation} ) => {
 	async function handleLogin() {
 		// Llamar a la funcion login() para iniciar sesion
 		let response = await login(email, password)
-
+		
 		// Verificar si hay error 400
-		if (response.status === 400 || response.error === 'invalid credentials') {
+		if (response.errors) {
 			console.log("Error 400");
-			setError('Usuario o contraseña incorrectos ' + response.error)
+			
+			// error mensaje
+            let errorMessage = "Hay algunos errores:";
 
-			// timeout para que el mensaje de error desaparezca
-			setTimeout(() => {
-				setError('')
-			}, 3000);
+            // Obtener errores
+            let errores = response.errors;
+
+            for (let i = 0; i < errores.length; i++) {
+                errorMessage += "\nEl campo " + errores[i].path + " "+ errores[i].msg.toLowerCase();
+            }
+
+            // Mostrar error
+            setError(errorMessage)
+
+            // timeout para que el mensaje de error desaparezca
+            setTimeout(() => {
+                setError('')
+            }
+            , 3000*errores.length);
 
 			return;
 		}
 
-		// Verificar si hay error 500
-		if (response.status === 500) {
-			console.log("Error 500");
-			setError('Error de servidor')
+		let ufs = response.user.tokenAuthServerToUser;
 
-			// timeout para que el mensaje de error desaparezca
-			setTimeout(() => {
-				setError('')
-			}
-			, 3000);
-
-			return;
-		}
-        console.log("Usuario logeado")
-
-		// Crear objeto usuario
         let usuario = {
-            id: response._id,
-            nombre: response.name,
-            email: response.username,
-            direccion: response.address,
-            token: response.token
+            nombre: ufs.name,
+            email: ufs.username,
+            direccion: ufs.address,
+            token: ufs.tokenAuthServerToAPI
         }
-
         // Guardar el usuario en el AsyncStorage
         storeUser(usuario)
 		
