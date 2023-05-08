@@ -52,6 +52,15 @@ const Home = ( {navigation} ) => {
         );
 
     }, [isFocused]);
+    const alertFunction = (soundAlarm,
+        setSoundAlarm) => {
+        console.log("Alerta enviada");
+        sendAlert();
+        playAlarm(soundAlarm,
+            setSoundAlarm);
+    
+    }
+
     //Funcion enviar nueva alerta
     const sendAlert = async () => {
         try {
@@ -123,9 +132,10 @@ const Home = ( {navigation} ) => {
                         ]}
 
                         // onPress={() => sendAlert()}
-                        onPress={() => playAlarm(
+                        onPress={() => alertFunction(
                             soundAlarm,
                             setSoundAlarm,
+                            
                         )}
                         onPressIn={() => setPressed(true)}
                         onPressOut={() => setPressed(false)}

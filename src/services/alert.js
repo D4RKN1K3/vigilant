@@ -11,7 +11,7 @@ async function newAlert( authToken ) {
     })
     
     const data = await response.json()
-    console.log(data)
+    console.log("mensaje al enviar alerta: "+data)
 
     return data
 }

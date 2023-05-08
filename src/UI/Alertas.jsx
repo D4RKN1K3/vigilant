@@ -3,12 +3,15 @@ import {ScrollView,SafeAreaView, StyleSheet, TextInput,Button, Text, View, Press
 import Alerta from '../components/alerta';
 import { getAlerts } from '../services/alert.js';
 import { getUser } from '../services/auth.js';
+import { useIsFocused } from "@react-navigation/native";
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 
 const Alertas = ( {navigation} ) => {
   const [alerts,setAlerts] = useState([]);
   const [usuario,setUsuario] = useState({});
+  // Verificar si la vista esta enfocada
+  const isFocused = useIsFocused();
 
   let alertas = [
     {
@@ -86,7 +89,7 @@ const Alertas = ( {navigation} ) => {
     console.log('Alertas');
     console.log(alerts);
 
-  },[]);
+  },[isFocused]);
 
   const listarAlertas = () => {
     // return <View style={{borderLeftColor: 'orange',borderLeftWidth: 4, marginLeft: 10, marginTop: 10}}>
@@ -104,7 +107,7 @@ const Alertas = ( {navigation} ) => {
       return <Text>No hay alertas</Text>
     }
     return <View style={{borderLeftColor: 'orange',borderLeftWidth: 4, marginLeft: 10, marginTop: 10}}>
-      {alerts.reverse().map(alert=>{
+      {alerts.map(alert=>{
         let id = alert._id;
         let fecha = new Date(alert.date).toLocaleString();
         let nombreEmisor = alert.name;

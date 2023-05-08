@@ -14,6 +14,7 @@ async function subscribe( token ) {
     })
     
     const data = await response.json()
+    console.log("suscrito")
     console.log(data)
 
     return data
