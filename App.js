@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import {PermissionsAndroid} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { StyleSheet, Text, View , Image,Button, Alert, Pressable, Platform, BackHandler} from 'react-native';
@@ -10,6 +11,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState, useRef } from 'react';
 import { subscribe } from './src/services/notification.js';
 import { playAlarm } from './src/services/playAlarm.js';
+
+PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
 export default function App() {
     // sound alarm
@@ -68,7 +71,7 @@ export default function App() {
 
             // Register foreground handler
             const unsubscribe = messaging().onMessage(async remoteMessage => {
-                alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+                Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
                 
                 // Reproducir el sonido
                 playAlarm( soundAlarm, setSoundAlarm )

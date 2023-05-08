@@ -15,9 +15,8 @@ function HomeDrawer() {
     return (
         <Drawer.Navigator>
             {/* cambiar este component por Home una vez este el server funcionando */}
-            <Drawer.Screen name="Home" component={Home} options={{ title: 'Vigilant - Alarma vecinal'}}/>
-            <Drawer.Screen name="Ejemplo" component={Ejemplo} />
-            <Drawer.Screen name="Alertas" component={Alertas} options={{ title: 'Vigilant - Últimas alertas' }}/>
+            <Drawer.Screen name="Home" component={Home} options={{ title: 'Vigilant - Alarma vecinal', drawerLabel: 'Inicio' }}/>
+            <Drawer.Screen name="Alertas" component={Alertas} options={{ title: 'Vigilant - Últimas alertas', drawerLabel: 'Últimas alertas' }}/>
         </Drawer.Navigator>
     );
 }
