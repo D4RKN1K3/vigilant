@@ -26,7 +26,7 @@ const Login = ( {navigation} ) => {
 
 	async function handleLogin() {
 		// Llamar a la funcion login() para iniciar sesion
-		let response = await login(email, password)
+		let response = await login(email.toLowerCase(), password)
 		
 		// Verificar si hay error 400
 		if (response.errors) {
@@ -82,7 +82,7 @@ const Login = ( {navigation} ) => {
 				style={styles.input}
 				placeholder='Correo'
 				keyboardType="email-address"
-				onChangeText={(text) => setEmail(text.toLowerCase())}
+				onChangeText={(text) => setEmail(text)}
 				value={email}
 			/>
 

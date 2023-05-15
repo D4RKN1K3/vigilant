@@ -41,7 +41,7 @@ const Registro = ( {navigation} ) => {
 
     async function handleRegister() {
         // Llamar a la funcion register() para iniciar sesion
-        let response = await register(email, password, nombre, direccion)
+        let response = await register(email.toLowerCase(), password, nombre, direccion)
 
         console.log(response)
 
@@ -105,7 +105,7 @@ const Registro = ( {navigation} ) => {
                 style={styles.input}
                 placeholder='Email'
                 keyboardType="email-address"
-                onChangeText={text => setEmail( text.toLowerCase() )}
+                onChangeText={text => setEmail( text )}
                 value={email}
             />
             <TextInput

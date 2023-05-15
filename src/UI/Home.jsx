@@ -116,7 +116,7 @@ const Home = ( {navigation} ) => {
             
             <View style={styles.logo}>
                 {/* show welcome and name if*/}
-                {user && <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Bienvenido {user.nombre}</Text>}
+                {user && <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Bienvenido(a) {user.nombre}</Text>}
                 
                 {/* Boton redondo rojo de panico con animación */}
                 <View style={{alignItems: 'center', justifyContent: 'center', marginTop: '10%', marginBottom: '10%', 
