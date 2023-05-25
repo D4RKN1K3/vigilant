@@ -7,6 +7,8 @@ import Ejemplo from '../UI/ejemplo';
 import Register from '../UI/Register';
 import Login from '../UI/Login';
 import Alertas from '../UI/Alertas'
+import Chat from '../UI/Chat'
+import ChatRoom from '../UI/ChatRoom'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 // Crear la función del navigation drawer
@@ -17,6 +19,7 @@ function HomeDrawer() {
             {/* cambiar este component por Home una vez este el server funcionando */}
             <Drawer.Screen name="Home" component={Home} options={{ title: 'Vigilant - Alarma vecinal', drawerLabel: 'Inicio' }}/>
             <Drawer.Screen name="Alertas" component={Alertas} options={{ title: 'Vigilant - Últimas alertas', drawerLabel: 'Últimas alertas' }}/>
+            <Drawer.Screen name="Chat" component={Chat} options={{ title: 'Vigilant - Chat', drawerLabel: 'Chat' }}/>
         </Drawer.Navigator>
     );
 }
@@ -36,6 +39,7 @@ export default function Rutas() {
             <Stack.Screen name="Ejemplo" component={Ejemplo} options={{ title: 'Ejemplo' }}/>
             <Stack.Screen name="Register" component={Register} options={{ title: 'Registro' }}/>
             <Stack.Screen name="Login" component={Login} options={{ title: 'Inicio de sesion' }}/>
+            <Stack.Screen name="ChatRoom" component={ChatRoom} options={{ title: 'Chat' }}/>
         </Stack.Navigator>
     );
 }
