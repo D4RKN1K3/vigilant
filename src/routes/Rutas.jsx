@@ -39,7 +39,7 @@ export default function Rutas() {
             <Stack.Screen name="Ejemplo" component={Ejemplo} options={{ title: 'Ejemplo' }}/>
             <Stack.Screen name="Register" component={Register} options={{ title: 'Registro' }}/>
             <Stack.Screen name="Login" component={Login} options={{ title: 'Inicio de sesion' }}/>
-            <Stack.Screen name="ChatRoom" component={ChatRoom} options={{ title: 'Chat' }}/>
+            {/* <Stack.Screen name="ChatRoom" component={ChatRoom} options={{ title: 'Chat' }}/> */}
         </Stack.Navigator>
     );
 }

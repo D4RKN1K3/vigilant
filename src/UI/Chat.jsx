@@ -1,102 +1,117 @@
-import React, { useState, useLayoutEffect } from 'react';
-import { Text, View, Button, TextInput, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Button, TextInput } from 'react-native';
+import Peer from 'peerjs';
+import { useIsFocused } from "@react-navigation/native";
+
+const Chat = () => {
+const [peerId, setPeerId] = useState(null);
+const [peer, setPeer] = useState(null);
+const [targetId, setTargetId] = useState('');
+const [msg, setMsg] = useState('');
+
+// Verificar si la vista esta enfocada
+const isFocused = useIsFocused();
 
 
-const BLUE = "#007AFF";
-const BLACK = "#000000";
-const LENGTH = 6; // Length of the Room ID
+useEffect(() => {
+	const initializePeer = async () => {
+		const peer = new Peer(undefined, {
+			host: 'localhost',
+			port: 9000,
+			path: '/myapp',
+			key: 'peerjs'
+		}); // Crear instancia de Peer
 
-export default function Home() {
-    const navigation = useNavigation();
-    const [roomID, setRoomId] = useState('');
+		// Esperar a que el Peer se abra y obtener el ID asignado
+		peer.on('open', (id) => {
+			setPeerId(id);
+		});
 
-    // Generating random room id for the initiating peer
-    const generateID = () => {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for (var i = 0; i < LENGTH; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-    }
+		// Manejar evento de conexión entrante
+		peer.on('connection', (connection) => {
+			// Manejar mensajes entrantes
+			connection.on('data', (data) => {
+				console.log('Mensaje recibido:', data);
+			});
+		});
 
-    const handleSubmit = () => {
-        if (roomID !== '') {
-        	// Enter the room
-            navigation.navigate('ChatRoom', { roomID: roomID });
-        }
-    }
+		setPeer(peer);
+	};
 
-    const handleCreateSubmit = () => {
-    	// Make a new room ID
-    	const room = generateID();
-    	console.log(room); // Share this room id to another peer in order to join in the same room
-    	setRoomId(room);
-        navigation.navigate('ChatRoom', { roomID: room });
-    }
+	initializePeer();
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.inputContainer}>
-                <Text style={{ alignSelf: 'center', fontSize: 24, margin: 8, fontWeight: 'bold' }}>P2P WEBRTC</Text>
-                <TextInput
-                    placeholder="Room ID"
-                    selectionColor="#DDD"
-                    onChangeText={(text) => setRoomId(text)}
-                    style={styles.textInput}
-                />
-            </View>
-            <View style={styles.buttonContainer}>
-                <Button
-                    color='#007AFF'
-                    onPress={handleSubmit}
-                    title="Join Room"
-                />
-            </View>
-            <View style={styles.buttonContainer}>
-                <Button
-                    color='#007AFF'
-                    onPress={handleCreateSubmit}
-                    title="Create Room"
-                />
-                <Text style={styles.textStyle}>Don't have a Room ID? Create One :)</Text>
-            </View>
-        </View>
-    )
-}
+	// Cleanup
+	return () => {
+		if (peer) {
+			peer.destroy();
+		}
+	};
+}, [isFocused]);
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F8F8FF',
-    },
-    textInput: {
-        height: 55,
-        paddingLeft: 15,
-        paddingRight: 15,
-        fontSize: 18,
-        backgroundColor: '#fff',
-        borderWidth: .5,
-    },
-    inputContainer: {
-        paddingLeft: 10,
-        paddingRight: 10,
-        margin: 10,
-    },
-    buttonContainer: {
-        padding: 15,
-    },
-    textStyle: {
-        alignSelf: 'center',
-        color: '#D3D3D3',
-        marginTop: 5,
-    },
-    errorStyle: {
-        alignSelf: 'center',
-        color: '#ff0000',
-        marginBottom: 5,
-        fontSize: 12,
-    }
-});
+const connectToPeer = (targetId) => {
+	if (!peer) {
+		return;
+	}
+
+	const connection = peer.connect(targetId); // Conectarse a un Peer
+
+	// Manejar mensajes entrantes
+	connection.on('data', (data) => {
+		console.log('Mensaje recibido:', data);
+	});
+};
+
+const sendMessage = (message) => {
+	if (!peer) {
+	return;
+	}
+
+	// const connections = peer.connections;
+
+	// // Enviar mensaje a todas las conexiones activas
+	// connections.forEach((connection) => {
+	// 	connection.send(message);
+	// });
+	const activeConnections = Object.values(peer.connections).flatMap((connectionList) => connectionList);
+
+	activeConnections.forEach((connection) => {
+		connection.send(message);
+	});
+};
+
+return (
+	<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+	{peerId ? (
+		<>
+			<Text style={{ marginBottom: 10 }}>ID de Peer: {peerId}</Text>
+			{/* input ingresar target-peer-id */}
+			<Text style={{ marginBottom: 10 }}>ID de Peer a conectar:</Text>
+			<TextInput
+				style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+				onChangeText={(text) => setTargetId(text)}
+				value={targetId}
+			/>
+
+		
+			<Button
+				title="Conectar a Peer"
+				onPress={() => connectToPeer(targetId)}
+			/>
+			<TextInput
+				style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+				onChangeText={(text) => setMsg(text)}
+				value={msg}
+			/>
+			<Button
+				title="Enviar Mensaje"
+				onPress={() => sendMessage(msg)}
+			/>
+		</>
+		) : (
+		<Text>Cargando...</Text>
+	)}
+	</View>
+);
+};
+
+export default Chat;
