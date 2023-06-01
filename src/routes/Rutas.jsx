@@ -8,7 +8,6 @@ import Register from '../UI/Register';
 import Login from '../UI/Login';
 import Alertas from '../UI/Alertas'
 import Chat from '../UI/Chat'
-import ChatRoom from '../UI/ChatRoom'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 // Crear la función del navigation drawer

@@ -8,6 +8,7 @@ const [peerId, setPeerId] = useState(null);
 const [peer, setPeer] = useState(null);
 const [targetId, setTargetId] = useState('');
 const [msg, setMsg] = useState('');
+const [conectedPeers, setconectedPeers] = useState([]);
 
 // Verificar si la vista esta enfocada
 const isFocused = useIsFocused();
@@ -29,6 +30,10 @@ useEffect(() => {
 
 		// Manejar evento de conexión entrante
 		peer.on('connection', (connection) => {
+
+			//agregar par conectado
+			setconectedPeers([...conectedPeers, connection.peer]);
+			
 			// Manejar mensajes entrantes
 			connection.on('data', (data) => {
 				console.log('Mensaje recibido:', data);
@@ -53,12 +58,20 @@ const connectToPeer = (targetId) => {
 		return;
 	}
 
+	if(conectedPeers.includes(targetId)){
+		console.log("Ya estas conectado a este peer");
+		return;
+	}
+
 	const connection = peer.connect(targetId); // Conectarse a un Peer
 
 	// Manejar mensajes entrantes
 	connection.on('data', (data) => {
 		console.log('Mensaje recibido:', data);
 	});
+
+	//agregar par conectado
+	setconectedPeers([...conectedPeers, targetId]);
 };
 
 const sendMessage = (message) => {
