@@ -5,7 +5,7 @@ import Botones from '../components/botones'
 import Logo from '../components/logo'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { newAlert } from '../services/alert.js';
-import { useIsFocused } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import {getUser} from '../services/auth.js';
 import { playAlarm } from '../services/playAlarm.js';
 
@@ -16,42 +16,45 @@ const Home = ( {navigation} ) => {
     const [user, setUser] = useState(null);
     // boton de panico presionado animacion
     const [pressed, setPressed] = useState(false);
-    // Verificar si la vista esta enfocada
-    const isFocused = useIsFocused();
+
     // sound alarm
     const [soundAlarm, setSoundAlarm] = useState(null);
 
 
     // Verificar si hay un usuario logeado
-    useEffect(() => {
-
-        const getUserFromApi = async () => {
-            const user = await getUser();
-            setUser(user);
-            
-        }
-        getUserFromApi();
-        
-        const backAction = () => {
-            if (navigation.isFocused()) {
-                Alert.alert("¡Espera!", "¿Estás seguro que quieres cerrar sesión?", [
-                {
-                  text: "Cancelar",
-                  onPress: () => null,
-                  style: "cancel"
-                },
-                { text: "Sí", onPress: () => logout() }
-              ]);
-              return true;
+    useFocusEffect(
+        React.useCallback(() => {
+            const getUserFromApi = async () => {
+                const user = await getUser();
+                setUser(user);
+                if (!user) {
+                    navigation.navigate('Main');
+                }
             }
-        };
-          
-        const backHandler = BackHandler.addEventListener(
-        "hardwareBackPress",
-        backAction
-        );
+            getUserFromApi();
+            
+            const backAction = () => {
+                if (navigation.isFocused()) {
+                    Alert.alert("¡Espera!", "¿Estás seguro que quieres cerrar sesión?", [
+                    {
+                        text: "Cancelar",
+                        onPress: () => null,
+                        style: "cancel"
+                    },
+                    { text: "Sí", onPress: () => logout() }
+                    ]);
+                    return true;
+                }
+            };
+            
+            const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+            );
+        }, [])
 
-    }, [isFocused]);
+    );
+
     const alertFunction = (soundAlarm,
         setSoundAlarm) => {
         console.log("Alerta enviada");
@@ -103,7 +106,6 @@ const Home = ( {navigation} ) => {
     // Alertas
     const verAlertas = async () => {
         navigation.navigate('Alertas');
- 
     }
 
     return (
@@ -112,7 +114,7 @@ const Home = ( {navigation} ) => {
             flex: 1,
             flexDirection: 'column',
             justifyContent: 'center',
-         }  }>
+        }  }>
             
             <View style={styles.logo}>
                 {/* show welcome and name if*/}
@@ -198,4 +200,3 @@ const styles = StyleSheet.create({
 
 
 });
-    
