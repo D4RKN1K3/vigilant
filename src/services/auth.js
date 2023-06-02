@@ -54,7 +54,7 @@ async function register( username, password , name, address, token){
 }
 
 async function getUser() {
-    console.log("se verifica usuario en home")
+    console.log("se verifica usuario")
     try {
         const user = await AsyncStorage.getItem('@user');
         //parse user to json
