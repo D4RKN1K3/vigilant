@@ -1,69 +1,70 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, TextInput } from 'react-native';
 import Peer from 'peerjs';
-import { useFocusEffect } from "@react-navigation/native";
-import {getUser} from '../services/auth.js';
+import { useFocusEffect } from '@react-navigation/native';
+import { getUser } from '../services/auth.js';
 
 const Chat = () => {
-const [peerId, setPeerId] = useState(null);
-const [peer, setPeer] = useState(null);
-const [targetId, setTargetId] = useState('');
-const [msg, setMsg] = useState('');
-const [conectedPeers, setconectedPeers] = useState([]);
-const [user, setUser] = useState(null);
+    const [peerId, setPeerId] = useState(null);
+    const [peer, setPeer] = useState(null);
+    const [targetId, setTargetId] = useState('');
+    const [msg, setMsg] = useState('');
+    const [conectedPeers, setconectedPeers] = useState([]);
+    const [user, setUser] = useState(null);
+    const [messages, setMessages] = useState([]); // Estado para almacenar los mensajes
 
     useFocusEffect(
         React.useCallback(() => {
             const getUserFromApi = async () => {
                 const user = await getUser();
                 setUser(user);
-                
+
                 if (!user) {
                     navigation.navigate('Main');
-                }else{
-                    console.log("Su nombre de usuario es "+ user.nombre);
+                } else {
+                    console.log('Su nombre de usuario es ' + user.nombre);
                 }
-            }
-    
+            };
+
             getUserFromApi();
-            
+
             const initializePeer = async () => {
                 const peer = new Peer(undefined, {
                     host: 'localhost',
                     port: 9000,
                     path: '/myapp',
-                    key: 'peerjs'
+                    key: 'peerjs',
                 }); // Crear instancia de Peer
-    
+
                 // Esperar a que el Peer se abra y obtener el ID asignado
                 peer.on('open', (id) => {
                     setPeerId(id);
                 });
-    
+
                 // Manejar evento de conexión entrante
                 peer.on('connection', (connection) => {
-    
-                    //agregar par conectado
+                    // Agregar par conectado
                     setconectedPeers([...conectedPeers, connection.peer]);
-                    
-                    // Manejar mensajes entrantes, indicando que usuario envió el mensaje
+
+                    // Manejar mensajes entrantes, agregarlos al estado de mensajes
                     connection.on('data', (data) => {
                         console.log(data);
+                        setMessages((prevMessages) => [...prevMessages, data]); // Actualizar el estado de mensajes
                     });
                 });
-    
+
                 setPeer(peer);
             };
-    
+
             initializePeer();
-    
+
             // Cleanup
             return () => {
                 if (peer) {
                     peer.destroy();
                 }
             };
-        }, []) 
+        }, [])
     );
 
     const connectToPeer = (targetId) => {
@@ -71,76 +72,81 @@ const [user, setUser] = useState(null);
             return;
         }
 
-        if(conectedPeers.includes(targetId)){
-            console.log("Ya estas conectado a este peer");
+        if (conectedPeers.includes(targetId)) {
+            console.log('Ya estás conectado a este peer');
             return;
         }
 
         const connection = peer.connect(targetId); // Conectarse a un Peer
 
-        // Manejar mensajes entrantes
+        // Manejar mensajes entrantes, agregarlos al estado de mensajes
         connection.on('data', (data) => {
             console.log(data);
+            setMessages((prevMessages) => [...prevMessages, data]); // Actualizar el estado de mensajes
         });
 
-        //agregar par conectado
+        // Agregar par conectado
         setconectedPeers([...conectedPeers, targetId]);
     };
 
     const sendMessage = (message) => {
         if (!peer) {
-        return;
+            return;
+        }
+
+        // comprobar si el mensaje es vacío
+        if (!message) {
+            return;
         }
 
         // Agregar nombre de usuario antes del mensaje
         message = `${user.nombre}: ${message}`;
 
-
-        // const connections = peer.connections;
-
-        // // Enviar mensaje a todas las conexiones activas
-        // connections.forEach((connection) => {
-        // 	connection.send(message);
-        // });
         const activeConnections = Object.values(peer.connections).flatMap((connectionList) => connectionList);
 
         activeConnections.forEach((connection) => {
             connection.send(message);
+
+            // Agregar mensaje al estado de mensajes
+            setMessages((prevMessages) => [...prevMessages, message]);
+
+            // Limpiar input
+            setMsg('');
         });
     };
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        {peerId ? (
-            <>
-                <Text style={{ marginBottom: 10 }}>ID de Peer: {peerId}</Text>
-                {/* input ingresar target-peer-id */}
-                <Text style={{ marginBottom: 10 }}>ID de Peer a conectar:</Text>
-                <TextInput
-                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                    onChangeText={(text) => setTargetId(text)}
-                    value={targetId}
-                />
+            {peerId ? (
+                <>
+                    <Text style={{ marginBottom: 10 }}>ID de Peer: {peerId}</Text>
+                    {/* input ingresar target-peer-id */}
+                    <Text style={{ marginBottom: 10 }}>ID de Peer a conectar:</Text>
+                    <TextInput
+                        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                        onChangeText={(text) => setTargetId(text)}
+                        value={targetId}
+                    />
 
-            
-                <Button
-                    title="Conectar a Peer"
-                    onPress={() => connectToPeer(targetId)}
-                />
-                <TextInput
-                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                    onChangeText={(text) => setMsg(text)}
-                    value={msg}
-                />
-                <Button
-                    title="Enviar Mensaje"
-                    onPress={() => sendMessage(msg)}
-                />
-                
-            </>
+                    <Button title="Conectar a Peer" onPress={() => connectToPeer(targetId)} />
+                    <TextInput
+                        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                        onChangeText={(text) => setMsg(text)}
+                        value={msg}
+                    />
+                    <Button title="Enviar Mensaje" onPress={() => sendMessage(msg)} />
+
+                    {/* mostrar cada vez que se recibe un mensaje, scrolleable */}
+                    <Text style={{ marginTop: 10 }}>Mensajes:</Text>
+                    <View style={{ height: 200, width: 300, borderColor: 'gray', borderWidth: 1, marginTop: 10 }}>
+                        {messages.map((message, index) => (
+                            <Text key={index}>{message}</Text>
+                        ))}
+                    </View>
+                </>
             ) : (
-            <Text>Cargando...</Text>
-        )}
+                <Text>Cargando...</Text>
+            )}
         </View>
     );
 };
