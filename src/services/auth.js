@@ -7,7 +7,8 @@ import jwtDecode from 'jwt-decode';
 
 // Login
 async function login( username, password ) {
-    
+    //log auth url
+    console.log('AUTHENTICATION_API_URL: ' + AUTH_URL + '/credentials')
     
     const response = await fetch(AUTH_URL + '/credentials', {
         method: 'POST',
