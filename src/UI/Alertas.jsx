@@ -11,69 +11,6 @@ const Alertas = ({ navigation }) => {
 	const [alerts, setAlerts] = useState([]);
 	const [user, setUser] = useState({});
 
-	let alertas = [
-		{
-			id: 1,
-			emisor: 'Juan Perez',
-			direccion: 'Calle 1 # 2 - 3',
-			fecha: '2021-10-10 10:10:10'
-		},
-		{
-			id: 2,
-			emisor: 'Maria Lopez',
-			direccion: 'Calle 4 # 5 - 6',
-			fecha: '2021-10-12 08:10:10'
-		},
-		{
-			id: 3,
-			emisor: 'Pedro Gomez',
-			direccion: 'Calle 7 # 8 - 9',
-			fecha: '2021-10-13 09:10:10'
-		},
-		{
-			id: 4,
-			emisor: 'Luisa Rodriguez',
-			direccion: 'Calle 10 # 11 - 12',
-			fecha: '2021-10-14 10:10:10'
-		},
-		{
-			id: 5,
-			emisor: 'Carlos Sanchez',
-			direccion: 'Calle 13 # 14 - 15',
-			fecha: '2021-10-15 11:10:10'
-		},
-		{
-			id: 1,
-			emisor: 'Juan Perez',
-			direccion: 'Calle 1 # 2 - 3',
-			fecha: '2021-10-10 10:10:10'
-		},
-		{
-			id: 2,
-			emisor: 'Maria Lopez',
-			direccion: 'Calle 4 # 5 - 6',
-			fecha: '2021-10-12 08:10:10'
-		},
-		{
-			id: 3,
-			emisor: 'Pedro Gomez',
-			direccion: 'Calle 7 # 8 - 9',
-			fecha: '2021-10-13 09:10:10'
-		},
-		{
-			id: 4,
-			emisor: 'Luisa Rodriguez',
-			direccion: 'Calle 10 # 11 - 12',
-			fecha: '2021-10-14 10:10:10'
-		},
-		{
-			id: 5,
-			emisor: 'Carlos Sanchez',
-			direccion: 'Calle 13 # 14 - 15',
-			fecha: '2021-10-15 11:10:10'
-		},
-	];
-
 	useFocusEffect(
 
 		React.useCallback(() => {
@@ -81,13 +18,15 @@ const Alertas = ({ navigation }) => {
 				const user = await getUser();
 				setUser(user);
 				console.log(user);
+				if (!user) {
+					navigation.navigate('Main');
+				}
 				const alerts = await getAlerts(user.token);
 				if (alerts){
 					setAlerts(alerts);
-				}
-				
-				if (!user) {
-					navigation.navigate('Main');
+				}else{
+					// No se encontraron alertas
+					setAlerts([null]);
 				}
 			}
 			getAlertsFromApi();
@@ -101,7 +40,9 @@ const Alertas = ({ navigation }) => {
 	const listarAlertas = () => {
 		// Verificar si hay alertas
 		if (alerts.length === 0) {
-			return <Text>No hay alertas</Text>
+			return <Text>Cargando alertas...</Text>
+		}else if (alerts[0] === null){
+			return <Text>No se encontraron alertas</Text>
 		}
 		return <View style={{ borderLeftColor: 'orange', borderLeftWidth: 4, marginLeft: 10, marginTop: 10 }}>
 			{alerts.map(alert => {
