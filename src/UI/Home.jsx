@@ -8,7 +8,7 @@ import { newAlert } from '../services/alert.js';
 import { useFocusEffect } from "@react-navigation/native";
 import {getUser} from '../services/auth.js';
 import { playAlarm } from '../services/playAlarm.js';
-
+import { speechAzure } from '../services/speechAzure.js';
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Home = ( {navigation} ) => {
 
@@ -61,7 +61,7 @@ const Home = ( {navigation} ) => {
         sendAlert();
         playAlarm(soundAlarm,
             setSoundAlarm);
-    
+        speechAzure("La alerta ha sido enviada a todos los dispositivos registrados");
     }
 
     //Funcion enviar nueva alerta
@@ -137,7 +137,6 @@ const Home = ( {navigation} ) => {
                         onPress={() => alertFunction(
                             soundAlarm,
                             setSoundAlarm,
-                            
                         )}
                         onPressIn={() => setPressed(true)}
                         onPressOut={() => setPressed(false)}
