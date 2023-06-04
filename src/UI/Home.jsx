@@ -9,6 +9,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import {getUser} from '../services/auth.js';
 import { playAlarm } from '../services/playAlarm.js';
 import { speechAzure } from '../services/speechAzure.js';
+import 'react-native-get-random-values';
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Home = ( {navigation} ) => {
 
