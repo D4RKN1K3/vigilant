@@ -30,7 +30,7 @@ const Chat = () => {
 
             const initializePeer = async () => {
                 const peer = new Peer(undefined, {
-                    host: 'localhost',
+                    host: '127.0.0.1',
                     port: 9000,
                     path: '/myapp',
                     key: 'peerjs',
@@ -39,7 +39,7 @@ const Chat = () => {
                 // Esperar a que el Peer se abra y obtener el ID asignado
                 peer.on('open', (id) => {
                     setPeerId(id);
-                });
+                });                               
 
                 // Manejar evento de conexión entrante
                 peer.on('connection', (connection) => {
@@ -53,10 +53,11 @@ const Chat = () => {
                     });
                 });
 
-                setPeer(peer);
+                setPeer(peer);                
             };
+                    
 
-            initializePeer();
+            initializePeer();           
 
             // Cleanup
             return () => {
@@ -67,8 +68,25 @@ const Chat = () => {
         }, [])
     );
 
+    //async conect to peers
+    const connectToPeers =  () => {
+
+        peer.listAllPeers((peers) => {
+            //por cada peer encontrado, distinto de peerId, conectarse
+            peers.forEach((peerId) => {
+                if (peerId !== peer.id) {
+                    connectToPeer(peerId);
+                }
+            });
+        });
+    };  
+
     const connectToPeer = (targetId) => {
+        //log 
+        console.log('Conectando a ' + targetId);
         if (!peer) {
+            //log
+            console.log('Peer no inicializado');
             return;
         }
 
@@ -117,8 +135,9 @@ const Chat = () => {
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            {peerId ? (
+            {peerId ? (                
                 <>
+                    
                     <Text style={{ marginBottom: 10 }}>ID de Peer: {peerId}</Text>
                     {/* input ingresar target-peer-id */}
                     <Text style={{ marginBottom: 10 }}>ID de Peer a conectar:</Text>
@@ -128,7 +147,7 @@ const Chat = () => {
                         value={targetId}
                     />
 
-                    <Button title="Conectar a Peer" onPress={() => connectToPeer(targetId)} />
+                    <Button title="Conectar" onPress={() => connectToPeers()} />
                     <TextInput
                         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                         onChangeText={(text) => setMsg(text)}
