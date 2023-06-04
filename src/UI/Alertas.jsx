@@ -16,6 +16,9 @@ const Alertas = ({ navigation }) => {
 		React.useCallback(() => {
 			const getAlertsFromApi = async () => {
 				const user = await getUser();
+				if (!user) {
+					navigation.navigate('Main');
+				}
 				setUser(user);
 				console.log(user);
 				const alerts = await getAlerts(user.token);
@@ -26,9 +29,7 @@ const Alertas = ({ navigation }) => {
 					setAlerts([null]);
 				}
 				
-				if (!user) {
-					navigation.navigate('Main');
-				}
+				
 			}
 			getAlertsFromApi();
 

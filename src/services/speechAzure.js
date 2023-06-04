@@ -45,6 +45,8 @@
 // export { speechAzure };
 // cognitiveservices-speech
 import { SpeechConfig, AudioConfig, SpeechSynthesizer } from 'microsoft-cognitiveservices-speech-sdk';
+import 'react-native-get-random-values';
+
 
 // Text to Speech
 const speechAzure = (text) => {
