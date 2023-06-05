@@ -35,7 +35,9 @@ const playAlarm = async ( soundAlarm, setSoundAlarm ) => {
         // Guardar el sonido
         setSoundAlarm( soundLoaded )
         // Reproducir el sonido
+        await soundLoaded.sound.setVolumeAsync(0.01);
         await soundLoaded.sound.playAsync()
+
     }
 
 }
