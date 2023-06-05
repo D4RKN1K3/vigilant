@@ -12,6 +12,7 @@ import { useEffect, useState, useRef } from 'react';
 import { subscribe } from './src/services/notification.js';
 import { playAlarm } from './src/services/playAlarm.js';
 import 'react-native-get-random-values';
+import { speechAzure } from './src/services/speechAzure.js';
 
 PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
@@ -76,6 +77,8 @@ export default function App() {
                 
                 // Reproducir el sonido
                 playAlarm( soundAlarm, setSoundAlarm )
+                // azure
+                speechAzure( remoteMessage.notification.title + " " + remoteMessage.notification.body)
                 
             });
         
