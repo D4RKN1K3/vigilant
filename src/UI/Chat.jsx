@@ -31,9 +31,8 @@ const Chat = () => {
             const initializePeer = async () => {
                 const peer = new Peer(undefined, {
                     host: 'localhost',
-                    port: 5052,
-                    path: '/myapp',
-                    key: 'peerjs',
+                    port: 5051,
+                    path: '/peerjs'
                 }); // Crear instancia de Peer
 
                 // Esperar a que el Peer se abra y obtener el ID asignado
