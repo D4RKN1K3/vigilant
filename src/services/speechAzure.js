@@ -14,8 +14,7 @@ const speechAzure = async (text) => {
 
     // Obtener el archivo de audio
     // const url = `http://192.168.1.127:3000/convert?text=${text}`;
-    const url = `${VPS_TTS}/convert?text=${text}`;
-    
+    const url = `${VPS_TTS}/convert?text=${text}`;    
     
     console.log(`Obteniendo el archivo de audio de: ${url}`)
     const { uri } = await FileSystem.downloadAsync(
