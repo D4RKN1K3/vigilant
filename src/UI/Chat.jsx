@@ -73,7 +73,7 @@ const Chat = () => {
         peer.listAllPeers((peers) => {
             //por cada peer encontrado, distinto de peerId, conectarse
             peers.forEach((peerId) => {
-                if (peerId !== peer.id) {
+                if (peerId != peer.id) {
                     connectToPeer(peerId);
                 }
             });
