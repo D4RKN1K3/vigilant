@@ -17,6 +17,8 @@ const Chat = () => {
     const [connectedPeers, setConnectedPeers] = useState([]); // Estado para almacenar los peers conectados, formato {id: peerId, username: nombreUsuario}
     const [allPeers, setAllPeers] = useState([]); // Estado para almacenar todos los peers, ids
 
+    const [incommingConnections, setIncommingConnections] = useState([]); // Estado para almacenar las conexiones entrantes
+
     useFocusEffect(
         React.useCallback(() => {
             const getUserFromApi = async () => {
@@ -98,9 +100,14 @@ const Chat = () => {
                         // Agregar mensaje al estado de mensajes
                         setMessages((prevMessages) => [...prevMessages, data]);
                         // Si la conexion ya está en activeConnections, retornar
-                        if (activeConnections.includes(connection) === false) {
-                            setActiveConnections((prevConnections) => [...prevConnections, connection]);
-                        }
+                        // if (activeConnections.includes(connection) === false) {
+                        //     setActiveConnections((prevConnections) => [...prevConnections, connection]);
+                        // }
+
+                        // add incoming connection
+                        setIncommingConnections((incommingConnections)=> [...incommingConnections, connection]);
+
+                        
                     }
                 });
 
@@ -217,13 +224,35 @@ const Chat = () => {
                 // Agregar mensaje al estado de mensajes
                 setMessages((prevMessages) => [...prevMessages, data]);
                 // Si la conexion ya está en activeConnections, retornar
-                if (activeConnections.includes(conexion) === false) {
-                    setActiveConnections((activeConnections)=> [...activeConnections, conexion]);
-                }
+                // if (activeConnections.includes(conexion) === false) {
+                //     setActiveConnections((activeConnections)=> [...activeConnections, conexion]);
+                // }
+                // add incoming connection
+                setIncommingConnections((incommingConnections)=> [...incommingConnections, conexion]);
             }
         });
 
     };
+
+    useEffect(() => {
+
+        // Comprobar si el usuario está autenticado y si el peer está inicializado
+        if (!user || !peer || !incommingConnections || incommingConnections.length === 0) {
+            return;
+        }
+
+        // Agregar conexiones entrantes a activeConnections
+        incommingConnections.forEach((connection) => {
+            // Si la conexion ya está en activeConnections, retornar
+            if (activeConnections.includes(connection) === false) {
+                setActiveConnections((activeConnections)=> [...activeConnections, connection]);
+            }
+        });
+
+        // Limpiar incommingConnections
+        setIncommingConnections([]);
+
+    }, [incommingConnections]);
 
     const addActiveConnection = (id) => {
         // Buscar conexion por id
