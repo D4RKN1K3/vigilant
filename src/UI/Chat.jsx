@@ -258,8 +258,8 @@ const Chat = () => {
         // Buscar conexion por id
         let conexion = connectedPeers.find((connection) => (connection.peer === id));
 
-        // Agregar conexion al estado de conexiones activas
-        setActiveConnections((activeConnections)=> [...activeConnections, conexion]);
+        // Agregar conexion al estado de conexiones incoming
+        setIncommingConnections((incommingConnections)=> [...incommingConnections, conexion]);
     };
 
 
@@ -295,35 +295,16 @@ const Chat = () => {
                     <View style={{ height: 200, width: 300, borderColor: 'gray', borderWidth: 1 }}>
                         <ScrollView>
                             {availablePeers.map((disponible) => (
+                                // nice red : #A52A2A
+                                // nice green : #228B22
                                 <TouchableOpacity key={disponible.id} onPress={() => addActiveConnection(disponible.id)}>
-                                    <Text style={{ margin: 5 }}>{disponible.username}</Text>
+                                    <Text style={{ margin: 5, backgroundColor: activeConnections.some((connection) => connection.peer === disponible.id) ? '#228B22': 'trasparent',
+                                    color: activeConnections.some((connection) => connection.peer === disponible.id) ? '#FFFFFF': '#000000'}}>{disponible.username}</Text>
                                 </TouchableOpacity>
                             ))}
                         </ScrollView>
                     </View>
-
-                    {/* peers activos */}
-                    <Text style={{ marginTop: 10 }}>Peers activos:</Text>
-                    <View style={{ height: 200, width: 300, borderColor: 'gray', borderWidth: 1 }}>
-                        <ScrollView>
-                            {activeConnections.map((connection) => (
-                                <TouchableOpacity key={connection.peer} onPress={() => addActiveConnection(connection.peer)}>
-                                    <Text style={{ margin: 5 }}>{connection.peer}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </ScrollView>
-                    </View>
-
-                    <Text style={{ marginBottom: 10 }}>ID de Peer: {peerId}</Text>
-                    {/* input ingresar target-peer-id */}
-                    <Text style={{ marginBottom: 10 }}>ID de Peer a conectar:</Text>
-                    <TextInput
-                        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                        onChangeText={(text) => setTargetId(text)}
-                        value={targetId}
-                    />
-
-                    <Button title="Conectar" onPress={() => connectToPeers()} />
+                    
                     <TextInput
                         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                         onChangeText={(text) => setMsg(text)}
@@ -336,8 +317,10 @@ const Chat = () => {
                     <View style={{ height: 200, width: 300, borderColor: 'gray', borderWidth: 1, marginTop: 10 }}>
                         {messages.map((message, index) => (
                             <Text key={index}>{message}</Text>
-                        ))}
+                            ))}
                     </View>
+                    
+                    <Text style={{ marginBottom: 10 }}>ID de Peer: {peerId}</Text>
                 </>
             ) : (
                 <Text>Cargando...</Text>
