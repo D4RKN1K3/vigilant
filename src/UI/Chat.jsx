@@ -9,12 +9,15 @@ import { set } from 'react-native-reanimated';
 const Chat = () => {
     const [peerId, setPeerId] = useState(null);
     const [peer, setPeer] = useState(null);
-    const [targetId, setTargetId] = useState('');
     const [msg, setMsg] = useState(''); // Estado para almacenar el mensaje a enviar
     const [user, setUser] = useState(null); // Estado para almacenar el usuario
 
     const [connections, setConnections] = useState([]); // Estado para almacenar las conexiones {id, usuario, connection, estado, mensajes}
     const [chatSelected, setChatSelected] = useState(null); // Estado para almacenar el chat seleccionado (id de usuario)
+
+    // conexiones entrantes
+    // var connectionsIncoming = [];
+    const [connectionsIncoming, setConnectionsIncoming] = useState([]); // Estado para almacenar las conexiones entrantes
 
     useFocusEffect(
         React.useCallback(() => {
@@ -82,103 +85,110 @@ const Chat = () => {
         // Configurar conexiones entrante y agregarla al estado de conexiones 
         peer.on('connection', (connection) => {
             
-            // Agregar conexión al estado de conexiones
-            const conexion = { id: connection.peer, usuario: connection.peer, connection: connection, estado: 'conectado', mensajes: [] };
-            setConnections((prevConnections) => [...prevConnections, conexion]);
+            // Definir mensajes recibidos
+            setConnections((prevConnections) => {
+                const newConnections = [...prevConnections];
+                const conn = { id: connection.peer, usuario: connection.peer, connection: connection, estado: 'conectado', mensajes: [] }
+                console.log('Conexión entrante de ');
+                console.log(conn);
+                newConnections.push(conn);
+                return newConnections;
+            } );
 
-            // Mensajes recibidos
+
+            // Enviar su nombre de usuario
+            console.log('Enviando nombre de usuario' + user.nombre);
+            connection.send(`?${user.nombre}`);
+
+            // Definir mensajes recibidos
             connection.on('data', (data) => {
                 console.log(data);
                 receiveMessage(connection, data);
             } );
-
+            
         });
 
-        // Verificar estado de conexiones en 5 segundos
-        updateConnections();
+        // Obtener lista de pares conectados
+        findAllConnections();
 
     }, [peer, peerId]);
 
-    // Cuando se actualice el estado de conexiones, verificar estado de cada conexión
-    const updateConnections = () => {
-        
-        // Obtener lista de pares conectados
-        peer.listAllPeers((peers) => {
-            console.log('Verificando estado de conexiones');
-            var prevconnections = [...connections];    
-            
-            // Verificar estado de cada conexión
-            prevconnections.forEach((conexion) => {
-                if (peers.includes(conexion.id)) {
-                    // Conexión activa
-                    conexion.estado = 'conectado';
-                } else {
-                    // Conexión inactiva
-                    conexion.estado = 'desconectado';
+    // Verificar si hay conexiones entrantes
+    useEffect(() => {
+        // Verificar si hay conexiones entrantes
+        if (connectionsIncoming.length === 0) {
+            return;
+        }
+
+        // console.log('Conexiones entrantes: ' + connectionsIncoming.length);
+
+        // Agregar conexiones entrantes al estado de conexiones
+        setConnections((prevConnections) => {
+            const newConnections = [...prevConnections];
+
+            connectionsIncoming.forEach((connectionId) => {
+
+                // Verificar si no es el mismo usuario
+                if (connectionId === peerId) {
+                    // console.log('Es el mismo usuario');
+                    return;
                 }
-            }
+                console.log('Conexión entrante de ' + connectionId);
 
-            );
-
-            // Crear nuevas conexiones
-            peers.forEach((peerToken) => {
-
-                console.log(prevconnections)
-                // Verificar que no sea el mismo peer
-                if (peerToken === peerId) {
+                // Verificar si ya está conectado a este peer
+                if ( newConnections.find((conexion) => conexion.id === connectionId) ) {
+                    // console.log('Ya estás conectado a este peer');
                     return;
                 }
 
-                // Verificar si ya existe la conexión
-                if (!prevconnections.find((conexion) => conexion.id === peerToken)) {
-                    // Conexión nueva
-                    console.log('Nueva conexión');
+                // Crear conexión
+                console.log('Iniciando conexión con ' + connectionId);
+                const conn = peer.connect(connectionId);
+                
+                // Agregar conexión al estado de conexiones
+                const conexion = { id: conn.peer, usuario: conn.peer, connection: conn, estado: 'conectado', mensajes: [] };
+                newConnections.push(conexion);
 
-                    startConn = async () => {
-                        // Iniciar conexión
-                        const conn = peer.connect(peerToken);
+                // Definir mensajes recibidos
+                conn.on('data', (data) => {
+                    console.log(data);
+                    receiveMessage(conn, data);
+                });
 
-                        // Definir mensajes recibidos
-                        conn.on('data', (data) => {
-                            console.log(data);
-                            receiveMessage(conn, data);
-                        });
+                // Definir conexión abierta
+                conn.on('open', () => {
+                    console.log('Conexión abierta');
+                    // Enviar su nombre de usuario
+                    console.log('Enviando nombre de usuario ' + user.nombre);
+                    conn.send(`?${user.nombre}`);
+                });
 
-                        // Definir conexión abierta
-                        conn.on('open', () => {
-                            console.log('Conexión abierta');
-                            // Enviar su nombre de usuario
-                            console.log('Enviando nombre de usuario');
-                            conn.send(`?${user.nombre}`);
-                        });
-                    };
 
-                    startConn();
+            });
+            return newConnections;
+        } );
 
-                    // Agregar conexión al estado de conexiones
-                    const conexion = { id: peerToken, usuario: peerToken, connection: conn, estado: 'conectado', mensajes: [] };
-                    prevconnections.push(conexion);
-                    console.log(prevconnections);
-                }
+        // Limpiar conexiones entrantes
+        setConnectionsIncoming([]);
+        
+    }, [connectionsIncoming]);
+
+    // Buscar conexiones que no estén conectadas
+    const findAllConnections = () => {
+        peer.listAllPeers((peers) => {
+            // Obtener lista y agregar a conexiones entrantes
+            setConnectionsIncoming((prevConnectionsIncoming) => {
+                const newConnectionsIncoming = [...prevConnectionsIncoming];
+                newConnectionsIncoming.push(...peers);
+                return newConnectionsIncoming;
             } );
-
-            // Actualizar estado de conexiones
-            setConnections(prevconnections);
         });
 
-        // Verificar estado de conexiones cada 5 segundos
-        setTimeout(() => {
-            updateConnections();
-        } , 10000);
+        // Ejecutar cada 5 segundos
+        setTimeout(findAllConnections, 5000);
     };
-
-    useEffect(() => {
-        console.log('EStado de conexiones actualizado: ');
-        connections.forEach((conexion) => {
-            console.log(conexion);
-        });
-    }, [connections]);
-
+    
+    // 
     const receiveMessage = ( connection, message ) => {
         console.log("Mensaje recibido: " + message);
 
@@ -186,6 +196,7 @@ const Chat = () => {
         if (message.startsWith('?')) {
             // Obtener nombre de usuario
             let nombre = message.substring(1);
+            console.log('Nombre de usuario: ' + nombre);
             // Agregar nombre de usuario a la conexión
             setConnections((prevConnections) => {
                 const index = prevConnections.findIndex((conexion) => conexion.id === connection.peer);
@@ -204,6 +215,7 @@ const Chat = () => {
             newConnections[index].mensajes.push(message);
             return newConnections;
         } );
+
     };
 
     const connectToPeer = (targetId) => {
@@ -214,7 +226,6 @@ const Chat = () => {
             console.error('Hubo un error, el peer no está listo');
             return;
         }
-
         // Verificar si ya está conectado a este peer
         if ( connections.find((conexion) => conexion.id === targetId) ) {
             console.log('Ya estás conectado a este peer');
@@ -222,7 +233,7 @@ const Chat = () => {
         }
 
         // Iniciar conexión
-        console.log('Iniciando conexión');
+        console.log('Iniciando conexión con ' + targetId);
         const conn = peer.connect(targetId);
 
         // Definir mensajes recibidos
@@ -288,20 +299,12 @@ const Chat = () => {
                     <View style={{ height: 200, width: 300, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}>
                         {
                             connections.map((conexion, index) => (
-                                <Text key={index}>{conexion.usuario}</Text>
+                                <Text key={index} onPress={() => setChatSelected(conexion.id)}>{conexion.usuario}</Text>
                             ))
                         }
                     </View>
 
                     <Text style={{ marginBottom: 10 }}>ID de Peer: {peerId}</Text>
-                    {/* input ingresar target-peer-id */}
-                    {/* <Text style={{ marginBottom: 10 }}>ID de Peer a conectar:</Text>
-                    <TextInput
-                        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                        onChangeText={(text) => setTargetId(text)}
-                        value={targetId}
-                    />
-                    <Button title="Conectar" onPress={() => connectToPeers()} /> */}
 
                     <TextInput
                         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
