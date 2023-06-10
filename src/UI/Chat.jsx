@@ -278,13 +278,12 @@ const Chat = () => {
 
         activeConnections.forEach((connection) => {
             connection.send(message);
-
-            // Agregar mensaje al estado de mensajes
-            setMessages((prevMessages) => [...prevMessages, message]);
-
-            // Limpiar input
-            setMsg('');
         });
+        // Agregar mensaje al estado de mensajes
+        setMessages((prevMessages) => [...prevMessages, message]);
+
+        // Limpiar input
+        setMsg('');
     };
 
     return (
