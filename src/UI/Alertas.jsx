@@ -39,6 +39,7 @@ const Alertas = ({ navigation }) => {
 
 	);
 
+	// Dejarlo en componente
 	const listarAlertas = () => {
 		// Verificar si hay alertas
 		if (alerts.length === 0) {

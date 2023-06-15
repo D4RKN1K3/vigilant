@@ -1,11 +1,11 @@
 import 'react-native-gesture-handler';
-import {PermissionsAndroid} from 'react-native';
+import { PermissionsAndroid } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import { StyleSheet, Text, View , Image,Button, Alert, Pressable, Platform, BackHandler} from 'react-native';
+import { StyleSheet, Text, View, Image, Button, Alert, Pressable, Platform, BackHandler } from 'react-native';
 import Rutas from './src/routes/Rutas.jsx'; // Importamos las rutas
 import { AUTHENTICATION_API_URL } from '@env';
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState, useRef } from 'react';
@@ -24,8 +24,8 @@ export default function App() {
     const requestUserPermission = async () => {
         const authStatus = await messaging().requestPermission();
         const enabled =
-        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+            authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+            authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
         if (enabled) {
             console.log('Authorization status:', authStatus);
@@ -35,28 +35,28 @@ export default function App() {
     if (Platform.OS === 'android') {
 
         useEffect(() => {
-            if( requestUserPermission() ){
+            if (requestUserPermission()) {
                 messaging().getToken().then(token => {
                     console.log("suscribiendo: " + token)
                     subscribe(token)
                 });
-            }else {
+            } else {
                 console.log('No se pudo obtener el token', authStatus);
             }
 
             // Check whether an initial notification is available
             messaging()
                 .getInitialNotification()
-                .then( async (remoteMessage) => {
+                .then(async (remoteMessage) => {
                     if (remoteMessage) {
-                    console.log(
-                        'Notification caused app to open from quit state:',
-                        remoteMessage.notification,
-                    );
-                    setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+                        console.log(
+                            'Notification caused app to open from quit state:',
+                            remoteMessage.notification,
+                        );
+                        setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
                     }
                 }
-            );
+                );
 
             // Register foreground handler
             messaging().onNotificationOpenedApp(remoteMessage => {
@@ -67,24 +67,25 @@ export default function App() {
             });
 
             // Register background handler
-            messaging().setBackgroundMessageHandler(async remoteMessage => {            
+            messaging().setBackgroundMessageHandler(async remoteMessage => {
                 console.log('Message handled in the background!', remoteMessage);
             });
 
+            // CAMBIAR NOMBRE, ESTA RARO NO SE POR QUE SE LLAMA UNSUSCRIBE, AYUDA
             // Register foreground handler
             const unsubscribe = messaging().onMessage(async remoteMessage => {
                 Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
-                
+
                 // Reproducir el sonido
-                playAlarm( soundAlarm, setSoundAlarm )
+                playAlarm(soundAlarm, setSoundAlarm)
                 // azure
-                speechAzure( remoteMessage.notification.title + " " + remoteMessage.notification.body)
-                
+                speechAzure(remoteMessage.notification.title + " " + remoteMessage.notification.body)
+
             });
-        
+
             return unsubscribe;
-                
-    
+
+
         }, []);
 
     }
@@ -92,8 +93,8 @@ export default function App() {
     return (
         // Este contenedor es necesario para navegar entre pantallas
         <NavigationContainer>
-        {/* LLamamos a las rutas */}
-        <Rutas/>
+            {/* LLamamos a las rutas */}
+            <Rutas />
         </NavigationContainer>
     );
 
