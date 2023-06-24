@@ -64,21 +64,9 @@ const Alertas = ({ navigation }) => {
 		<SafeAreaView>
 			<ScrollView>
 				{listarAlertas()}
-
 			</ScrollView>
 		</SafeAreaView>
 	);
-	// <View>
-	// alerts.map(alert=>{
-	// const date =new Date(alert.createdAt);
-	// const user = alert.alertAndSender.name;
-	// const address = alert.alertAndSender.address;
-
-	// const dateString = date.toLocaleString(); 
-	// return <View key={alert._id}><Text >Emisor: {user} Direccion: {address} Fecha: {dateString}</Text></View>;
-	// })}
-
-	// </View>
 }
 
 export default Alertas

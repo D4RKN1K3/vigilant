@@ -1,11 +1,6 @@
 import React from 'react'
 import { Text, View, Image, Button,Pressable, StyleSheet, BackHandler, Alert } from 'react-native'
 import Constants from 'expo-constants'
-import Botones from '../components/botones'
-import Logo from '../components/logo'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
-
 
 const Alerta = (props) => {
     return (

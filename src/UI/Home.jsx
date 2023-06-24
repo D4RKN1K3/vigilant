@@ -1,14 +1,10 @@
-import React, {useEffect, useState} from 'react'
-import { Text, View, Image, Button,Pressable, StyleSheet,BackHandler, Alert } from 'react-native'
-import Constants from 'expo-constants'
-import Botones from '../components/botones'
-import Logo from '../components/logo'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { newAlert } from '../services/alert.js';
+import React, {useEffect, useState} from 'react';
+import { Text, View, StyleSheet,BackHandler, Alert } from 'react-native';
+import Constants from 'expo-constants';
+import Boton from '../components/Boton';
+import PanicButton from '../components/PanicButton';
 import { useFocusEffect } from "@react-navigation/native";
 import { getUser, removeUser} from '../services/auth.js';
-import { playAlarm } from '../services/playAlarm.js';
-import { speechAzure } from '../services/speechAzure.js';
 import 'react-native-get-random-values';
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Home = ( {navigation} ) => {
@@ -57,41 +53,6 @@ const Home = ( {navigation} ) => {
 
     );
 
-    const alertFunction = (soundAlarm,
-        setSoundAlarm) => {
-        console.log("Alerta enviada");
-        sendAlert();
-        playAlarm(soundAlarm,
-            setSoundAlarm);
-        speechAzure("La alerta ha sido enviada a todos los dispositivos registrados");
-    }
-
-    //Funcion enviar nueva alerta
-    const sendAlert = async () => {
-        try {
-            const user = await AsyncStorage.getItem('@user');
-            const userJson = user!=null ? JSON.parse(user) : null;
-            console.log("verificando usuario desde home");
-
-            setUser(userJson);
-
-            if (!userJson) {
-                navigation.navigate('Main');
-            }
-            try {
-                console.log(userJson.token);
-                const alert = await newAlert(userJson.token);
-                console.log(alert);
-            } catch (error) {
-                console.log(error);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-
-        
-    }
-
     // LOGOUT
     const logout = async () => {
         if( removeUser() ){
@@ -113,59 +74,15 @@ const Home = ( {navigation} ) => {
             justifyContent: 'center',
         }  }>
             
-            <View style={styles.logo}>
-                {/* show welcome and name if*/}
+            <View>
+
                 {user && <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Bienvenido(a) {user.nombre}</Text>}
-                
-                {/* Boton redondo rojo de panico con animación */}
-                <View style={{alignItems: 'center', justifyContent: 'center', marginTop: '10%', marginBottom: '10%', 
-                    height: 200
-                }}>
 
-                    <Pressable
-                        // style={pressed ? styles.buttonPanicPressed : styles.buttonPanic}
-                        // asignar estilo buttonPanic, si esta presionado heredar estilo buttonPanicPressed
-                        style={({ pressed }) => [
-                            styles.buttonPanic,
-                            pressed && styles.buttonPanicPressed
-                        ]}
+                <PanicButton />
 
-                        // onPress={() => sendAlert()}
-                        onPress={() => alertFunction(
-                            soundAlarm,
-                            setSoundAlarm,
-                        )}
-                        onPressIn={() => setPressed(true)}
-                        onPressOut={() => setPressed(false)}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 20,
-                                color: '#fff',
-                                fontWeight: 'bold',
-                                textAlign: 'center'
-                            }}
-                        >{"ACTIVAR ALERTA!"}</Text>
-                    </Pressable>
-                    
-                </View>
-            
+                <Boton title="Cerrar Sesion" onPress={logout} color="#ce0a0a" />
 
-                {/* boton logout */}
-                <Pressable style={styles.button}>
-                    <Button
-                        title="Cerrar Sesion"
-                        color="#f5bc0c"
-                        onPress={logout}
-                    />
-                </Pressable>
-                <Pressable style={styles.button}>
-                    <Button
-                        title="Alertas"
-                        color="#f5bc0c"
-                        onPress={verAlertas}
-                    />
-                </Pressable>
+                <Boton title="Ver Alertas" onPress={verAlertas} />
 
             </View>
 
@@ -176,23 +93,3 @@ const Home = ( {navigation} ) => {
 }
 
 export default Home
-
-const styles = StyleSheet.create({
-    button: {
-        marginTop: '5%',
-        width: '50%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-    logo: {
-        marginBottom: '20%',
-    },
-    buttonPanicPressed : {width: 175, height: 175,backgroundColor: '#ce0a0a'},
-    buttonPanic : {alignItems: 'center', justifyContent: 'center', width: 200, height: 200, backgroundColor: '#de0909', borderRadius: 100, shadowColor: 'black', shadowOffset: {
-            width: 2,
-            height: 5,
-        }, shadowOpacity: 1, shadowRadius: 10, elevation: 10,
-    }
-
-
-});

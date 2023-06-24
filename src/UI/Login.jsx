@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
-import {SafeAreaView, StyleSheet, TextInput,Button, Text, View, Pressable } from 'react-native';
-import { login, storeUser } from '../services/auth';
+import {SafeAreaView, StyleSheet, TextInput, Text} from 'react-native';
+import { login } from '../services/auth';
+import Boton from '../components/Boton';
+import Separador from '../components/Separador';
+import Titulo from '../components/Titulo';
+import Spinner from '../components/Spinner';
 
 
 
@@ -11,11 +15,26 @@ const Login = ( {navigation} ) => {
   	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState(''); // Error message
+	const [spinner, setSpinner] = useState(false);
 
 	async function handleLogin() {
+		// Mostrar spinner
+		setSpinner(true);
+		let response;
 		// Llamar a la funcion login() para iniciar sesion
-		let response = await login(email.toLowerCase(), password);
+		try {
+			response = await login(email.toLowerCase(), password);
+		}
+		catch (error) {
+			console.log(error);
+			setError('Hubo un error con la conexión al servidor');
+			setSpinner(false);
+			return;
+		}
 		
+		// Ocultar spinner
+		setSpinner(false);
+
 		// Verificar si hay error 400
 		if (response.errors) {
 			console.log("Error 400");
@@ -46,12 +65,15 @@ const Login = ( {navigation} ) => {
 		navigation.navigate('Home')
 	}
 
+	// Show spinner
+	if(spinner){
+		return <Spinner />
+	}
+
 	return (
 		<SafeAreaView style={styles.container}>
 
-			<Text style={styles.title} >
-				Iniciar Sesión
-			</Text>
+			<Titulo> Iniciar Sesión </Titulo>
 			
 			{error ? <Text style={styles.alertdanger}>{error}</Text> : null}
 
@@ -72,31 +94,15 @@ const Login = ( {navigation} ) => {
 				value={password}
 			/>
 
-			<Pressable style={styles.button}>
-				<Button
-					title="Ingresar"
-					color={"#ff9519"}
-					onPress={handleLogin}
-				/>   
-			</Pressable>
+			<Boton title="Ingresar" onPress={handleLogin} color={"#ff9519"} />
 
-			{/* Separador -o- */}
-			<View style={{flexDirection: 'row', justifyContent: 'center', marginTop: '5%' ,alignItems: 'center', marginVertical:'5%', marginHorizontal:'5%'}}>
-				<View style={{width: '30%', height: 1, backgroundColor: 'black'}} />
-				<Text style={{width: '20%', textAlign: 'center'}}> o </Text>
-				<View style={{width: '30%', height: 1, backgroundColor: 'black'}} />
-			</View>
-
+			<Separador />
+			
 			<Text style={styles.text}>
 				Olvidaste tu contraseña?
 			</Text>
 
-			<Pressable style={styles.button}>
-				<Button
-					title="Recuperar contraseña"
-					color={"#414bb2"}
-				/>   
-			</Pressable>
+			<Boton title="Recuperar contraseña" onPress={() => {}} color={"#414bb2"} />
 
 		</SafeAreaView>
 	);
@@ -115,18 +121,6 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginTop: '10%',
 	},
-	title: {
-		fontSize: 40,
-		fontWeight: 'bold',
-		textAlign: 'center',
-		marginBottom: '10%',
-	},
-	button: {
-        marginTop: '5%',
-        width: '50%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
 	text: {
 		textAlign: 'center',
 	},
@@ -136,7 +130,6 @@ const styles = StyleSheet.create({
 		backgroundColor: 'red',
 		borderRadius: 3,
 		padding: 5,
-
 	},
 	
 });

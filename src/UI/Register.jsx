@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
-import {SafeAreaView, StyleSheet, TextInput,Button, Text, View, Pressable} from 'react-native';
+import {SafeAreaView, StyleSheet, TextInput, Text} from 'react-native';
 import {register} from '../services/auth';
-import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Boton from '../components/Boton';
+import Titulo from '../components/Titulo';
+import Spinner from '../components/Spinner';
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 
@@ -16,12 +17,27 @@ const Registro = ( {navigation} ) => {
     // error message
     const [error, setError] = useState('');
     const [FCMToken, setFCMToken] = useState('');
+    const [spinner, setSpinner] = useState(false);
     
     async function handleRegister() {
-        // Llamar a la funcion register() para iniciar sesion
-        let response = await register(email.toLowerCase(), password, nombre, direccion)
+        // Mostrar spinner
+        setSpinner(true);
 
-        console.log(response)
+        // Llamar a la funcion register() para iniciar sesion
+        let response;
+        
+        try {
+            response = await register(email.toLowerCase(), password, nombre, direccion)
+        } catch (error) {
+            console.log(error);
+            // Ocultar spinner y mostrar error
+            setError('Hubo un error con la conexión al servidor');
+            setSpinner(false);
+            return;
+        }
+
+        // Ocultar spinner
+        setSpinner(false);
 
         // Verificar si hay errores
         if (response.errors) {
@@ -56,13 +72,15 @@ const Registro = ( {navigation} ) => {
         navigation.navigate('Home')
     }
 
+    if(spinner) {
+        return <Spinner />
+    }
+
     return (
         <SafeAreaView style={styles.container}>
 
-            <Text style={styles.title} >
-                Registrarse
-            </Text>
-
+            <Titulo> Registrarse </Titulo>
+            
             {error ? <Text style={styles.alertdanger}>{error}</Text> : null}
 
             <TextInput
@@ -95,13 +113,7 @@ const Registro = ( {navigation} ) => {
                 value={direccion}
             />
 
-            <Pressable style={styles.button}>
-				<Button
-					title="Registrarse"
-					color={"#ff9519"}
-					onPress={handleRegister}
-				/>   
-			</Pressable>
+            <Boton title="Registrarse" onPress={handleRegister} />
             
         </SafeAreaView>
     );
@@ -119,12 +131,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         marginTop: '5%',
-    },
-    title: {
-        fontSize: 40,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: '10%',
     },
     button: {
         marginTop: '5%',
