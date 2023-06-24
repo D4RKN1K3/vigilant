@@ -36,6 +36,7 @@ const Main = ( {navigation} ) => {
         }
         
         checkUser();
+
         const backAction = () => {
             if (navigation.isFocused()) {
                 Alert.alert("¡Espera!", "¿Estás seguro que salir?", [
@@ -51,8 +52,8 @@ const Main = ( {navigation} ) => {
             };
         
         const backHandler = BackHandler.addEventListener(
-        "hardwareBackPress",
-        backAction
+            "hardwareBackPress",
+            backAction
         );
 
     }, [isFocused]);

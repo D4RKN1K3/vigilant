@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
 
 // Login
-async function login( username, password ) {
+async function login( username, password, saveUser = true) {
     //log auth url
     console.log('AUTHENTICATION_API_URL: ' + AUTH_URL + '/credentials')
     
@@ -28,10 +28,27 @@ async function login( username, password ) {
 
     // Desencriptar data
     const paquete = jwtDecode(data);
+
+    // Guardar usuario
+    if (saveUser){
+        console.log("Guardando usuario", paquete)
+
+        let ufs = paquete.user.tokenAuthServerToUser;
+
+        let usuario = {
+            nombre: ufs.name,
+            email: ufs.username,
+            direccion: ufs.address,
+            token: ufs.tokenAuthServerToAPI
+        }
+        // Guardar el usuario en el AsyncStorage
+        storeUser(usuario)
+    }
+
     return paquete
 }
 
-async function register( username, password , name, address, token){
+async function register( username, password , name, address, token="", saveUser = true){
     
     console.log('AUTHENTICATION_API_URL: ' + BACKEND_URL + '/register')
     
@@ -44,16 +61,36 @@ async function register( username, password , name, address, token){
             username,
             password,
             name,
-            address,
-            token
+            address
         })
     })
     
-    const data = await response.json()
+    const data = await response.json();
+
+    if (!data.errors){
+        // Si no hay errores, se logea y se guarda el usuario
+        const loginResponse = await login(username, password);
+        if (loginResponse.errors){
+            data.errors = [...data.errors, ...response.errors]
+        }
+    }
 
     return data
 }
 
+// store user in storage
+async function storeUser(value) {
+    try {
+        const jsonValue = JSON.stringify(value)
+        await AsyncStorage.setItem('@user', jsonValue)
+    } catch (e) {
+        // saving error
+        console.log(e)
+    }
+    console.log("Usuario guardado")
+}
+
+// get user from storage
 async function getUser() {
     console.log("se verifica usuario")
     try {
@@ -67,6 +104,18 @@ async function getUser() {
     return null;
 }
 
+// remove user from storage / logout
+async function removeUser() {
+    try {
+        await AsyncStorage.removeItem('@user');
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
+
 // getToken
 async function getToken() {
     try {
@@ -79,4 +128,8 @@ async function getToken() {
     }
 }
 
-export { login , register, getUser, getToken}
+
+
+
+
+export { login , register, getUser, getToken, storeUser, removeUser }

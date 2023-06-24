@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import {SafeAreaView, StyleSheet, TextInput,Button, Text, View, Pressable } from 'react-native';
-import { login } from '../services/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { login, storeUser } from '../services/auth';
+
+
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Login = ( {navigation} ) => {
@@ -9,24 +10,11 @@ const Login = ( {navigation} ) => {
 	// Crear variables de estado para guardar los datos ingresados en los inputs
   	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	// error message
-	const [error, setError] = useState('');
-
-	// Guardar el usuario en el AsyncStorage
-	async function storeUser(value) {
-        try {
-            const jsonValue = JSON.stringify(value)
-            await AsyncStorage.setItem('@user', jsonValue)
-        } catch (e) {
-            // saving error
-            console.log(e)
-        }
-		console.log("Usuario guardado")
-    }
+	const [error, setError] = useState(''); // Error message
 
 	async function handleLogin() {
 		// Llamar a la funcion login() para iniciar sesion
-		let response = await login(email.toLowerCase(), password)
+		let response = await login(email.toLowerCase(), password);
 		
 		// Verificar si hay error 400
 		if (response.errors) {
@@ -53,17 +41,6 @@ const Login = ( {navigation} ) => {
 
 			return;
 		}
-
-		let ufs = response.user.tokenAuthServerToUser;
-
-        let usuario = {
-            nombre: ufs.name,
-            email: ufs.username,
-            direccion: ufs.address,
-            token: ufs.tokenAuthServerToAPI
-        }
-        // Guardar el usuario en el AsyncStorage
-        storeUser(usuario)
 		
 		// Cambiar de vista a Main
 		navigation.navigate('Home')
@@ -110,7 +87,7 @@ const Login = ( {navigation} ) => {
 				<View style={{width: '30%', height: 1, backgroundColor: 'black'}} />
 			</View>
 
-			<Text style={styles.text} >
+			<Text style={styles.text}>
 				Olvidaste tu contraseña?
 			</Text>
 

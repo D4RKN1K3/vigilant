@@ -6,7 +6,7 @@ import Logo from '../components/logo'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { newAlert } from '../services/alert.js';
 import { useFocusEffect } from "@react-navigation/native";
-import {getUser} from '../services/auth.js';
+import { getUser, removeUser} from '../services/auth.js';
 import { playAlarm } from '../services/playAlarm.js';
 import { speechAzure } from '../services/speechAzure.js';
 import 'react-native-get-random-values';
@@ -15,6 +15,7 @@ const Home = ( {navigation} ) => {
 
     // USER
     const [user, setUser] = useState(null);
+
     // boton de panico presionado animacion
     const [pressed, setPressed] = useState(false);
 
@@ -68,7 +69,6 @@ const Home = ( {navigation} ) => {
     //Funcion enviar nueva alerta
     const sendAlert = async () => {
         try {
-
             const user = await AsyncStorage.getItem('@user');
             const userJson = user!=null ? JSON.parse(user) : null;
             console.log("verificando usuario desde home");
@@ -85,8 +85,6 @@ const Home = ( {navigation} ) => {
             } catch (error) {
                 console.log(error);
             }
-
-
         } catch (error) {
             console.log(error);
         }
@@ -96,14 +94,12 @@ const Home = ( {navigation} ) => {
 
     // LOGOUT
     const logout = async () => {
-        try {
-            await AsyncStorage.removeItem('@user');
+        if( removeUser() ){
             setUser(null);
             navigation.navigate('Main');
-        } catch (error) {
-            console.log(error);
         }
     }
+    
     // Alertas
     const verAlertas = async () => {
         navigation.navigate('Alertas');

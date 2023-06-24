@@ -17,28 +17,6 @@ const Registro = ( {navigation} ) => {
     const [error, setError] = useState('');
     const [FCMToken, setFCMToken] = useState('');
     
-    async function storeUser(value) {
-        try {
-            const jsonValue = JSON.stringify(value)
-            await AsyncStorage.setItem('@user', jsonValue)
-        } catch (e) {
-            // saving error
-            console.log(e)
-        }
-    }
-
-    // get FCM token from firebase
-    async function getFCMToken() {
-        try {
-            const token = await messaging().getToken();
-            setFCMToken(token);
-            console.log("FCM token: ", token);
-        } catch (e) {
-            console.log(e)
-            setFCMToken('');
-        }
-    }
-
     async function handleRegister() {
         // Llamar a la funcion register() para iniciar sesion
         let response = await register(email.toLowerCase(), password, nombre, direccion)
@@ -72,21 +50,7 @@ const Registro = ( {navigation} ) => {
             return;
         }
 
-        console.log("Usuario registrado exitosamente")
-
-        // Login
-
-
-        // Crear objeto usuario
-        let usuario = {
-            id: response._id,
-            nombre: response.name,
-            email: response.username,
-            direccion: response.address,
-            token: response.token
-        }
-        // Guardar el usuario en el AsyncStorage
-        // storeUser(usuario)
+        console.log("Usuario registrado exitosamente");
 
         // Cambiar de vista a Main
         navigation.navigate('Home')
