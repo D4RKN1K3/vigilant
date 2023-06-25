@@ -22,7 +22,13 @@ async function login( username, password, saveUser = true) {
     })
     
     const data = await response.json()
-    if (data.errors){
+    if (data.errors || data.error){
+        if( data.error ){
+            data.errors = [{
+                path : "username",
+                msg : data.error,
+            }]
+        }
         return data
     }
 
@@ -67,12 +73,22 @@ async function register( username, password , name, address, token="", saveUser 
     
     const data = await response.json();
 
-    if (!data.errors){
-        // Si no hay errores, se logea y se guarda el usuario
-        const loginResponse = await login(username, password);
-        if (loginResponse.errors){
-            data.errors = [...data.errors, ...response.errors]
-        }
+    if( data.error ){
+        data.errors = [{
+            path : "username",
+            msg : data.error,
+        }]
+    }
+    
+    if (data.errors){
+        return data
+    }
+
+    // Si no hay errores, se logea y se guarda el usuario
+    // Login
+    const loginResponse = await login(username, password);
+    if (loginResponse.errors){
+        data.errors = [...data.errors, ...response.errors]
     }
 
     return data

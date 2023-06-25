@@ -12,13 +12,6 @@ const Home = ( {navigation} ) => {
     // USER
     const [user, setUser] = useState(null);
 
-    // boton de panico presionado animacion
-    const [pressed, setPressed] = useState(false);
-
-    // sound alarm
-    const [soundAlarm, setSoundAlarm] = useState(null);
-
-
     // Verificar si hay un usuario logeado
     useFocusEffect(
         React.useCallback(() => {
