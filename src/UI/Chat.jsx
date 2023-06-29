@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Button, TextInput } from 'react-native';
 import Peer from 'peerjs';
 import { useFocusEffect } from '@react-navigation/native';
-import { getUser } from '../services/auth.js';
+import { getUser, validateUser } from '../services/users/auth.js';
+import Spinner from '../components/Spinner';
+import { set } from 'react-native-reanimated';
 
 const Chat = () => {
     const [peerId, setPeerId] = useState(null);
@@ -16,14 +18,7 @@ const Chat = () => {
     useFocusEffect(
         React.useCallback(() => {
             const getUserFromApi = async () => {
-                const user = await getUser();
-                setUser(user);
-
-                if (!user) {
-                    navigation.navigate('Main');
-                } else {
-                    console.log('Su nombre de usuario es ' + user.nombre);
-                }
+                setUser(await validateUser(navigation));
             };
 
             getUserFromApi();
@@ -134,9 +129,8 @@ const Chat = () => {
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            {peerId ? (                
+            {peerId ? (
                 <>
-                    
                     <Text style={{ marginBottom: 10 }}>ID de Peer: {peerId}</Text>
                     {/* input ingresar target-peer-id */}
                     <Text style={{ marginBottom: 10 }}>ID de Peer a conectar:</Text>
@@ -163,7 +157,7 @@ const Chat = () => {
                     </View>
                 </>
             ) : (
-                <Text>Cargando...</Text>
+                <Spinner> </Spinner>
             )}
         </View>
     );

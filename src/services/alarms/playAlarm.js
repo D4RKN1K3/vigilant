@@ -17,7 +17,7 @@ const playAlarm = async ( soundAlarm, setSoundAlarm ) => {
         }
     }else{
         // Cargar el sonido
-        const soundLoaded = await Audio.Sound.createAsync( require('../../assets/sounds/alarm.mp3') )
+        const soundLoaded = await Audio.Sound.createAsync( require('../../../assets/sounds/alarm.mp3') )
         console.log(soundLoaded)
 
         soundLoaded.sound.setOnPlaybackStatusUpdate( (playbackStatus) => {

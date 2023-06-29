@@ -4,8 +4,10 @@ import Constants from 'expo-constants';
 import Boton from '../components/Boton';
 import PanicButton from '../components/PanicButton';
 import { useFocusEffect } from "@react-navigation/native";
-import { getUser, removeUser} from '../services/auth.js';
+import { validateUser, removeUser, getUser} from '../services/users/auth.js';
 import 'react-native-get-random-values';
+import Spinner from '../components/Spinner';
+
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Home = ( {navigation} ) => {
 
@@ -16,13 +18,10 @@ const Home = ( {navigation} ) => {
     useFocusEffect(
         React.useCallback(() => {
             const getUserFromApi = async () => {
-                const user = await getUser();
-                setUser(user);
-                if (!user) {
-                    navigation.navigate('Main');
-                }
+                setUser(await validateUser(navigation));
             }
             getUserFromApi();
+            //setUser(validateUser());
             
             const backAction = () => {
                 if (navigation.isFocused()) {
@@ -66,7 +65,7 @@ const Home = ( {navigation} ) => {
             flexDirection: 'column',
             justifyContent: 'center',
         }  }>
-            
+            {user ? (
             <View>
 
                 {user && <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Bienvenido(a) {user.nombre}</Text>}
@@ -78,7 +77,9 @@ const Home = ( {navigation} ) => {
                 <Boton title="Ver Alertas" onPress={verAlertas} />
 
             </View>
-
+            ):(
+                <Spinner />
+            )}
         </View>
     )
 

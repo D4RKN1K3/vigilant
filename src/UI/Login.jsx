@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {SafeAreaView, StyleSheet, TextInput, Text} from 'react-native';
-import { login } from '../services/auth';
+import { login } from '../services/users/auth';
 import Boton from '../components/Boton';
 import Separador from '../components/Separador';
 import Titulo from '../components/Titulo';
@@ -12,7 +12,7 @@ import Spinner from '../components/Spinner';
 const Login = ( {navigation} ) => {
 
 	// Crear variables de estado para guardar los datos ingresados en los inputs
-  	const [email, setEmail] = useState('');
+	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState(''); // Error message
 	const [spinner, setSpinner] = useState(false);

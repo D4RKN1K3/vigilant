@@ -1,11 +1,11 @@
 import React from 'react'
 import { useState } from 'react';
-import { playAlarm } from '../services/playAlarm.js';
-import { speechAzure } from '../services/speechAzure.js';
-import { newAlert } from '../services/alert.js';
+import { playAlarm } from '../services/alarms/playAlarm.js';
+import { speechAzure } from '../services/alarms/speechAzure.js';
+import { newAlert } from '../services/alarms/alert.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Pressable, StyleSheet } from 'react-native'
-import { getUser } from '../services/auth.js';
+import { getUser } from '../services/users/auth.js';
 
 const styles = StyleSheet.create({
     buttonPanicPressed : {width: 175, height: 175,backgroundColor: '#ce0a0a'},

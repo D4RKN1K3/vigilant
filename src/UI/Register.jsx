@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {SafeAreaView, StyleSheet, TextInput, Text} from 'react-native';
-import {register} from '../services/auth';
+import {register} from '../services/users/auth';
 import Boton from '../components/Boton';
 import Titulo from '../components/Titulo';
 import Spinner from '../components/Spinner';

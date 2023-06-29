@@ -9,10 +9,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState, useRef } from 'react';
-import { subscribe } from './src/services/notification.js';
-import { playAlarm } from './src/services/playAlarm.js';
+import { subscribe } from './src/services/alarms/notification.js';
+import { playAlarm } from './src/services/alarms/playAlarm.js';
 import 'react-native-get-random-values';
-import { speechAzure } from './src/services/speechAzure.js';
+import { speechAzure } from './src/services/alarms/speechAzure.js';
 
 PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
@@ -92,8 +92,8 @@ export default function App() {
     return (
         // Este contenedor es necesario para navegar entre pantallas
         <NavigationContainer>
-        {/* LLamamos a las rutas */}
-        <Rutas/>
+            {/* LLamamos a las rutas */}
+            <Rutas/>
         </NavigationContainer>
     );
 

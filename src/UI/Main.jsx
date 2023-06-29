@@ -6,6 +6,7 @@ import Logo from '../components/Logo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import { useIsFocused } from "@react-navigation/native";
+import { validateUserMain } from '../services/users/auth.js';
 
 // Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
 const Main = ( {navigation} ) => {
@@ -15,26 +16,7 @@ const Main = ( {navigation} ) => {
     // Verificar si hay un usuario logeado
     useEffect( () => {
         
-        const checkUser = async () => {
-            try {
-                console.log('Verificando usuario');
-                const user = await AsyncStorage.getItem('@user');
-                const userJson = user!=null ? JSON.parse(user) : null;
-
-                if (userJson) {
-                    console.log('Usuario encontrado');
-                    console.log(userJson);
-                    // remover usuario
-                    // await AsyncStorage.removeItem('@user');
-                    navigation.navigate('Home');
-                }
-                
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        
-        checkUser();
+        validateUserMain(navigation);
 
         const backAction = () => {
             if (navigation.isFocused()) {

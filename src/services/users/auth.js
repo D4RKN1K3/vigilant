@@ -1,9 +1,9 @@
 // React native - Expo
 // import env
-import { BACKEND_URL, AUTH_URL, AUTH_KEY } from '@env'
-import { useNavigation } from '@react-navigation/native' 
+import { BACKEND_URL, AUTH_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
+import { useNavigation } from '@react-navigation/native';
 
 // Login
 async function login( username, password, saveUser = true) {
@@ -22,13 +22,14 @@ async function login( username, password, saveUser = true) {
     })
     
     const data = await response.json()
-    if (data.errors || data.error){
-        if( data.error ){
-            data.errors = [{
-                path : "username",
-                msg : data.error,
-            }]
-        }
+    if( data.error ){
+        data.errors = [{
+            path : "username",
+            msg : data.error,
+        }]
+        return data
+    }
+    else if (data.errors){
         return data
     }
 
@@ -54,7 +55,8 @@ async function login( username, password, saveUser = true) {
     return paquete
 }
 
-async function register( username, password , name, address, token="", saveUser = true){
+// Registro
+async function register( username, password , name, address, saveUser = true){
     
     console.log('AUTHENTICATION_API_URL: ' + BACKEND_URL + '/register')
     
@@ -84,20 +86,22 @@ async function register( username, password , name, address, token="", saveUser 
         return data
     }
 
-    // Si no hay errores, se logea y se guarda el usuario
-    // Login
-    const loginResponse = await login(username, password);
-    if (loginResponse.errors){
-        data.errors = [...data.errors, ...response.errors]
+    // Guardar usuario
+    if (saveUser){
+        // Si no hay errores, se logea y se guarda el usuario
+        const loginResponse = await login(username, password);
+        if (loginResponse.errors){
+            data.errors = [...data.errors, ...response.errors]
+        }
     }
 
     return data
 }
 
-// store user in storage
-async function storeUser(value) {
+// Guarda el usuario localmente en el AsyncStorage
+async function storeUser(userObject) {
     try {
-        const jsonValue = JSON.stringify(value)
+        const jsonValue = JSON.stringify(userObject)
         await AsyncStorage.setItem('@user', jsonValue)
     } catch (e) {
         // saving error
@@ -106,7 +110,7 @@ async function storeUser(value) {
     console.log("Usuario guardado")
 }
 
-// get user from storage
+// Se obtiene el usuario del AsyncStorage
 async function getUser() {
     console.log("se verifica usuario")
     try {
@@ -120,7 +124,7 @@ async function getUser() {
     return null;
 }
 
-// remove user from storage / logout
+// Quitar usuario del AsyncStorage, se usa para el logout
 async function removeUser() {
     try {
         await AsyncStorage.removeItem('@user');
@@ -131,8 +135,7 @@ async function removeUser() {
     }
 }
 
-
-// getToken
+// Se obtiene el token del usuario del AsyncStorage
 async function getToken() {
     try {
         const user = await AsyncStorage.getItem('@user');
@@ -144,8 +147,21 @@ async function getToken() {
     }
 }
 
+// Se valida si el usuario esta logeado
+async function validateUser(navigation){
+    const user = await getUser();
+    if (user){
+        return user;
+    }
+    navigation.navigate('Main');
+}
 
+// Se valida si el usuario esta logeado en main
+async function validateUserMain(navigation){
+    const user = await getUser();
+    if (user){
+        navigation.navigate('Home');
+    }
+}
 
-
-
-export { login , register, getUser, getToken, storeUser, removeUser }
+export { login, register, getUser, getToken, storeUser, removeUser, validateUser, validateUserMain }

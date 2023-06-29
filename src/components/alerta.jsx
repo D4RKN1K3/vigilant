@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, Image, Button,Pressable, StyleSheet, BackHandler, Alert } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
 import Constants from 'expo-constants'
 
 const Alerta = (props) => {
