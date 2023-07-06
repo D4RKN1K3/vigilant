@@ -1,6 +1,6 @@
 // React native - Expo
 // import env
-import { BACKEND_URL, AUTH_URL } from '@env'
+import { BACKEND_URL, AUTH_URL, AUTH_KEY } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
 import { useNavigation } from '@react-navigation/native';
@@ -8,8 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 // Login
 async function login( username, password, saveUser = true) {
     //log auth url
-    console.log('AUTHENTICATION_API_URL: ' + AUTH_URL + '/credentials')
-    
     const response = await fetch(AUTH_URL + '/credentials', {
         method: 'POST',
         headers: {
@@ -38,7 +36,6 @@ async function login( username, password, saveUser = true) {
 
     // Guardar usuario
     if (saveUser){
-        console.log("Guardando usuario", paquete)
 
         let ufs = paquete.user.tokenAuthServerToUser;
 
@@ -57,8 +54,6 @@ async function login( username, password, saveUser = true) {
 
 // Registro
 async function register( username, password , name, address, saveUser = true){
-    
-    console.log('AUTHENTICATION_API_URL: ' + BACKEND_URL + '/register')
     
     const response = await fetch(BACKEND_URL + '/register', {
         method: 'POST',
@@ -103,16 +98,17 @@ async function storeUser(userObject) {
     try {
         const jsonValue = JSON.stringify(userObject)
         await AsyncStorage.setItem('@user', jsonValue)
+        return true;
     } catch (e) {
         // saving error
         console.log(e)
     }
-    console.log("Usuario guardado")
+    return false;    
 }
 
 // Se obtiene el usuario del AsyncStorage
 async function getUser() {
-    console.log("se verifica usuario")
+    
     try {
         const user = await AsyncStorage.getItem('@user');
         //parse user to json
@@ -131,8 +127,8 @@ async function removeUser() {
         return true;
     } catch (error) {
         console.log(error);
-        return false;
     }
+    return false;
 }
 
 // Se obtiene el token del usuario del AsyncStorage
@@ -140,11 +136,11 @@ async function getToken() {
     try {
         const user = await AsyncStorage.getItem('@user');
         const userJson = user!=null ? JSON.parse(user) : null;
-        console.log("desdetoken:"+userJson);
         return userJson.token;
     } catch (error) {
         console.log(error);
     }
+    return null;
 }
 
 // Se valida si el usuario esta logeado
