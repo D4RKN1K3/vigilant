@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, BackHandler, Alert } from 'react-native';
 import Constants from 'expo-constants';
-import Boton from '../components/Boton';
-import PanicButton from '../components/PanicButton';
+import Boton from '../components/boton';
+import PanicButton from '../components/panicButton';
 import { useFocusEffect } from "@react-navigation/native";
 import { validateUser, removeUser } from '../services/users/auth.js';
 import 'react-native-get-random-values';
-import Spinner from '../components/Spinner';
+import Spinner from '../components/spinner';
 
 /**
  * Crea la vista de Home (Inicio), donde se encuentra el boton de panico y el boton de cerrar sesion

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, BackHandler, Alert, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
-import Boton from '../components/Boton';
-import Logo from '../components/Logo';
+import Boton from '../components/boton';
+import Logo from '../components/logo';
 import { useEffect } from 'react';
 import { useIsFocused } from "@react-navigation/native";
 import { validateUserMain } from '../services/users/auth.js';

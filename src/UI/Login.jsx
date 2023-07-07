@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import {SafeAreaView, StyleSheet, TextInput, Text} from 'react-native';
 import { login } from '../services/users/auth';
-import Boton from '../components/Boton';
-import Separador from '../components/Separador';
-import Titulo from '../components/Titulo';
-import Spinner from '../components/Spinner';
+import Boton from '../components/boton';
+import Separador from '../components/separador';
+import Titulo from '../components/titulo';
+import Spinner from '../components/spinner';
 
 /**
  * Crea la vista de Login

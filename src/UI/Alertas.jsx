@@ -3,7 +3,7 @@ import { ScrollView, SafeAreaView, StyleSheet, TextInput, Button, Text, View, Pr
 import { getAlerts } from '../services/alarms/alert.js';
 import { getUser, validateUser } from '../services/users/auth.js';
 import { useFocusEffect } from "@react-navigation/native";
-import Spinner from '../components/Spinner';
+import Spinner from '../components/spinner.jsx';
 import { set } from 'react-native-reanimated';
 import ListadoAlertas from '../components/listadoAlertas';
 

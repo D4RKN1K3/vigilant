@@ -3,7 +3,7 @@ import { View, Text, Button, TextInput } from 'react-native';
 import Peer from 'peerjs';
 import { useFocusEffect } from '@react-navigation/native';
 import { validateUser } from '../services/users/auth.js';
-import Spinner from '../components/Spinner.jsx';
+import Spinner from '../components/spinner.jsx';
 
 /**
  * Crea la vista de Chat
