@@ -18,6 +18,7 @@ const Boton = ({title, onPress, color = "#f5bc0c"}) => {
     )
 }
 
+
 const styles = StyleSheet.create({
     pressableButton: {
         marginTop: '5%',
