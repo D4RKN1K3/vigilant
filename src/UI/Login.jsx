@@ -6,9 +6,11 @@ import Separador from '../components/Separador';
 import Titulo from '../components/Titulo';
 import Spinner from '../components/Spinner';
 
-
-
-// Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
+/**
+ * Crea la vista de Login
+ * @param {*} props Parametros: navigation
+ * @returns Componente Login
+ */
 const Login = ( {navigation} ) => {
 
 	// Crear variables de estado para guardar los datos ingresados en los inputs

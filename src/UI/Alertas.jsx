@@ -3,14 +3,19 @@ import { ScrollView, SafeAreaView, StyleSheet, TextInput, Button, Text, View, Pr
 import { getAlerts } from '../services/alarms/alert.js';
 import { getUser, validateUser } from '../services/users/auth.js';
 import { useFocusEffect } from "@react-navigation/native";
-import Spinner from '../components/spinner';
+import Spinner from '../components/Spinner';
 import { set } from 'react-native-reanimated';
 import ListadoAlertas from '../components/listadoAlertas';
 
-// Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
+/**
+ * Crea la vista de Alertas
+ * @param {*} props Parametros: navigation
+ * @returns Componente Alertas
+ */
 const Alertas = ({ navigation }) => {
 	const [alerts, setAlerts] = useState(null);
 	const [user, setUser] = useState(null);
+	const [spinner, setSpinner] = useState(true);
 
 	useFocusEffect(
 
@@ -30,46 +35,24 @@ const Alertas = ({ navigation }) => {
 		}
 
 		const getAlertsFromApi = async () => {
-			
 			const alerts = await getAlerts(user.token);
 			setAlerts(alerts);
-
+			setSpinner(false);
 		}
 		getAlertsFromApi();
 
 	}, [user]);
 
-	const styles = StyleSheet.create({
-		title: {
-			fontSize: 20,
-			fontWeight: 'bold',
-			textAlign: 'center',
-			marginTop: 10
-		},
-	});
-
-	const listarAlertas = () => {
-		// Verificar si hay alertas > 0
-		if (alerts.length === 0) {
-			return <Text
-				style={styles.title}
-			>No se encontraron alertas</Text>
-		}
-		
-		return (
-			<ListadoAlertas alertas={alerts}/>
-		)
+	if(spinner){
+		return <Spinner/>
 	}
 
 	return (
-		alerts === null ? <Spinner></Spinner> 
-		:(
 		<SafeAreaView>
 			<ScrollView>
-				{listarAlertas()}
+				<ListadoAlertas alertas={alerts}/>
 			</ScrollView>
 		</SafeAreaView>
-		)
 	);
 }
 

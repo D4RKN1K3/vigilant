@@ -7,15 +7,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import { getUser } from '../services/users/auth.js';
 
-const styles = StyleSheet.create({
-    buttonPanicPressed : {width: 175, height: 175,backgroundColor: '#ce0a0a'},
-    buttonPanic : {alignItems: 'center', justifyContent: 'center', width: 200, height: 200, backgroundColor: '#de0909', borderRadius: 100, shadowColor: 'black', shadowOffset: {
-            width: 2,
-            height: 5,
-        }, shadowOpacity: 1, shadowRadius: 10, elevation: 10,
-    }
-});
 
+/**
+ * Crea el boton de panico
+ * @returns Componente Boton de Panico
+ */
 const PanicButton = () => {
 
     // setPressed
@@ -27,8 +23,6 @@ const PanicButton = () => {
     const sendAlert = async () => {
 
         try {
-            // const user = await AsyncStorage.getItem('@user');
-            // const userJson = user!=null ? JSON.parse(user) : null;
             const userJson = await getUser();
 
             setUser(userJson);
@@ -53,24 +47,25 @@ const PanicButton = () => {
         setSoundAlarm) => {
         console.log("Alerta enviada");
         sendAlert();
-        playAlarm(soundAlarm,
-            setSoundAlarm);
+        playAlarm(soundAlarm,setSoundAlarm);
         speechAzure("La alerta ha sido enviada a todos los dispositivos registrados");
     }
 
+    const styles = StyleSheet.create({
+        buttonPanicPressed : {width: 175, height: 175,backgroundColor: '#ce0a0a'},
+        buttonPanic : {alignItems: 'center', justifyContent: 'center', width: 200, height: 200, 
+            backgroundColor: '#de0909', borderRadius: 100, shadowColor: 'black', 
+            shadowOffset: {width: 2, height: 5}, shadowOpacity: 1, shadowRadius: 10, elevation: 10,
+        },
+        textButtonPanic : {fontSize: 20, color: '#fff', fontWeight: 'bold', textAlign: 'center'},
+        containerButtonPanic: {alignItems: 'center', justifyContent: 'center', marginTop: '10%', marginBottom: '10%', height: 200},
+    });
+
     return (
-        <View style={{alignItems: 'center', justifyContent: 'center'
-            , marginTop: '10%', marginBottom: '10%', 
-            height: 200
-            }}>
+        <View style={styles.containerButtonPanic}>
 
             <Pressable
-                style={({ pressed }) => [
-                    styles.buttonPanic,
-                    pressed && styles.buttonPanicPressed
-                ]}
-
-                // onPress={() => sendAlert()}
+                style={ [ styles.buttonPanic , pressed ? styles.buttonPanicPressed : styles.buttonPanic] }
                 onPress={() => alertFunction(
                     soundAlarm,
                     setSoundAlarm,
@@ -79,15 +74,10 @@ const PanicButton = () => {
                 onPressOut={() => setPressed(false)}
             >
                 <Text
-                    style={{
-                        fontSize: 20,
-                        color: '#fff',
-                        fontWeight: 'bold',
-                        textAlign: 'center'
-                    }}
+                    style={styles.textButtonPanic}
                 >{"ACTIVAR ALERTA!"}</Text>
             </Pressable>
-            
+
         </View>
     )
 }

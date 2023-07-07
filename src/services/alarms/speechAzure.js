@@ -4,24 +4,23 @@ import { Audio } from 'expo-av';
 import { VPS_TTS } from '@env';
 
 /**
- * Reproduce el audio de Azure
- * @param {*} text 
+ * Mandar una petición al backend para crear un Text to Speech con Azure
+ * y lo reproduce
+ * @param {*} text Texto a convertir a audio
+ * @returns Devuelve el sonido reproducido
  */
 const speechAzure = async (text) => {
     
-    // Verificar
-
     // Verificar si el texto está vacio
     if( text.trim() === '' ){
-        return;
+        return null;
     }
 
     // Reemplazar los espacios por %20
-    text = text.replace(/ /g, "%20");
+    const textTransformed = text.replace(/ /g, "%20");
 
     // Obtener el archivo de audio
-    // const url = `http://192.168.1.127:3000/convert?text=${text}`;
-    const url = `${VPS_TTS}/convert?text=${text}`;    
+    const url = `${VPS_TTS}/convert?text=${textTransformed}`;    
     
     // Play the sound with Expo's audio API
     const { sound } = await Audio.Sound.createAsync(
@@ -30,9 +29,8 @@ const speechAzure = async (text) => {
     );
 
     await sound.playAsync();
-    // Your sound is playing!
-    console.log("Reproduciendo el sonido!!!!!!")
-
+    
+    return sound;
 }
 
 export { speechAzure };

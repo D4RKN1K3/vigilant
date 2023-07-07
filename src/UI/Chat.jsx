@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Button, TextInput } from 'react-native';
 import Peer from 'peerjs';
 import { useFocusEffect } from '@react-navigation/native';
-import { getUser, validateUser } from '../services/users/auth.js';
-import Spinner from '../components/Spinner';
-import { set } from 'react-native-reanimated';
+import { validateUser } from '../services/users/auth.js';
+import Spinner from '../components/Spinner.jsx';
 
+/**
+ * Crea la vista de Chat
+ * @returns Componente Chat
+ */
 const Chat = () => {
     const [peerId, setPeerId] = useState(null);
     const [peer, setPeer] = useState(null);

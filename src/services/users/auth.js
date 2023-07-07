@@ -5,8 +5,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
 import { useNavigation } from '@react-navigation/native';
 
-// Login
-async function login( username, password, saveUser = true) {
+/**
+ * Permite logearse en el backend y obtener los datos del usuario
+ * @param {string} email Email del usuario
+ * @param {string} password Contraseña del usuario
+ * @param {boolean} saveUser Booleano para guardar el usuario en el AsyncStorage
+ * @returns 
+ */
+async function login( email, password, saveUser = true) {
     //log auth url
     const response = await fetch(AUTH_URL + '/credentials', {
         method: 'POST',
@@ -14,7 +20,7 @@ async function login( username, password, saveUser = true) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            username,
+            username: email,
             password
         })
     })
@@ -52,8 +58,16 @@ async function login( username, password, saveUser = true) {
     return paquete
 }
 
-// Registro
-async function register( username, password , name, address, saveUser = true){
+/**
+ * Permite registrarse en el backend
+ * @param {string} username Email del usuario
+ * @param {string} password Contraseña del usuario
+ * @param {string} name Nombre del usuario
+ * @param {string} address Dirección del usuario
+ * @param {boolean} saveUser Booleano para guardar el usuario en el AsyncStorage
+ * @returns 
+ */
+async function register( correo, password , name, address, saveUser = true){
     
     const response = await fetch(BACKEND_URL + '/register', {
         method: 'POST',
@@ -61,7 +75,7 @@ async function register( username, password , name, address, saveUser = true){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            username,
+            username: correo,
             password,
             name,
             address
@@ -93,7 +107,11 @@ async function register( username, password , name, address, saveUser = true){
     return data
 }
 
-// Guarda el usuario localmente en el AsyncStorage
+/**
+ * Guarda el usuario localmente en el AsyncStorage
+ * @param {Json} userObject Objeto del usuario
+ * @returns {boolean} Devuelve true si se guardó correctamente
+ */
 async function storeUser(userObject) {
     try {
         const jsonValue = JSON.stringify(userObject)
@@ -106,7 +124,11 @@ async function storeUser(userObject) {
     return false;    
 }
 
-// Se obtiene el usuario del AsyncStorage
+
+/**
+ * Obtiene el usuario del AsyncStorage
+ * @returns {Json} Devuelve el usuario en formato JSON o null si no existe
+ */
 async function getUser() {
     
     try {
@@ -120,7 +142,10 @@ async function getUser() {
     return null;
 }
 
-// Quitar usuario del AsyncStorage, se usa para el logout
+/**
+ * Elimina el usuario del AsyncStorage
+ * @returns {boolean} Devuelve true si se eliminó correctamente
+ */
 async function removeUser() {
     try {
         await AsyncStorage.removeItem('@user');
@@ -131,7 +156,10 @@ async function removeUser() {
     return false;
 }
 
-// Se obtiene el token del usuario del AsyncStorage
+/**
+ * Obtiene el token del usuario del AsyncStorage
+ * @returns {string} Devuelve el token del usuario o null si no existe
+ */
 async function getToken() {
     try {
         const user = await AsyncStorage.getItem('@user');
@@ -143,16 +171,25 @@ async function getToken() {
     return null;
 }
 
-// Se valida si el usuario esta logeado
+/**
+ * Valida si el usuario esta logeado
+ * @param {Navigation} navigation Objeto de navegación
+ * @returns {Json} Devuelve el usuario en formato JSON o null si no existe
+ */
 async function validateUser(navigation){
     const user = await getUser();
     if (user){
         return user;
     }
     navigation.navigate('Main');
+    return null;
 }
 
 // Se valida si el usuario esta logeado en main
+/**
+ * Valida si el usuario esta logeado
+ * @param {Navigation} navigation
+ */
 async function validateUserMain(navigation){
     const user = await getUser();
     if (user){

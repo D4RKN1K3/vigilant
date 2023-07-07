@@ -5,8 +5,11 @@ import Boton from '../components/Boton';
 import Titulo from '../components/Titulo';
 import Spinner from '../components/Spinner';
 
-// Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
-
+/**
+ * Crea la vista de Registro
+ * @param {*} props Parametros: navigation
+ * @returns Componente Registro
+ */
 const Registro = ( {navigation} ) => {
 
     // Crear variables de estado para guardar los datos ingresados en los inputs
@@ -16,9 +19,11 @@ const Registro = ( {navigation} ) => {
     const [direccion, setDireccion] = useState('');
     // error message
     const [error, setError] = useState('');
-    const [FCMToken, setFCMToken] = useState('');
     const [spinner, setSpinner] = useState(false);
     
+    /**
+     * Manejar el registro de un usuario en la vista de Registro
+     */
     async function handleRegister() {
         // Mostrar spinner
         setSpinner(true);
@@ -66,18 +71,44 @@ const Registro = ( {navigation} ) => {
             return;
         }
 
-        console.log("Usuario registrado exitosamente");
-
         // Cambiar de vista a Main
         navigation.navigate('Home')
     }
+
+    const styles = StyleSheet.create({
+        registroContainer: {
+            flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'center',
+        },
+        input: {
+            height: 50,
+            margin: 12,
+            borderWidth: 1,
+            padding: 10,
+            marginTop: '5%',
+        },
+        button: {
+            marginTop: '5%',
+            width: '50%',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+        alertdanger: {
+            textAlign: 'center',
+            color: 'white',
+            backgroundColor: 'red',
+            borderRadius: 3,
+            padding: 5,
+        },
+    });
 
     if(spinner) {
         return <Spinner />
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.registroContainer}>
 
             <Titulo> Registrarse </Titulo>
             
@@ -118,33 +149,5 @@ const Registro = ( {navigation} ) => {
         </SafeAreaView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-		flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'center',
-	},
-    input: {
-        height: 50,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-        marginTop: '5%',
-    },
-    button: {
-        marginTop: '5%',
-        width: '50%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-    alertdanger: {
-		textAlign: 'center',
-		color: 'white',
-		backgroundColor: 'red',
-		borderRadius: 3,
-		padding: 5,
-	},
-});
 
 export default Registro

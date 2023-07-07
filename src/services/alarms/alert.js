@@ -1,6 +1,10 @@
 import { BACKEND_URL } from '@env'
 
-// Alert
+/**
+ * Manda una petición al backend para crear una nueva alerta
+ * @param {*} authToken Token de autenticación del backend
+ * @returns Devuelve la respuesta del backend
+ */
 async function newAlert( authToken ) {
     const response = await fetch(BACKEND_URL + '/alerts/new', {
         method: 'POST',
@@ -14,6 +18,11 @@ async function newAlert( authToken ) {
     return data
 }
 
+/**
+ * Solicita las alertas al backend
+ * @param {*} authToken Token de autenticación del backend
+ * @returns Devuelve la respuesta del backend
+ */
 async function getAlerts( authToken ) {
     try {
         const response = await fetch(BACKEND_URL + '/alerts', {

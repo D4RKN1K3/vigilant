@@ -3,12 +3,15 @@ import { View, BackHandler, Alert, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import Boton from '../components/Boton';
 import Logo from '../components/Logo';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import { useIsFocused } from "@react-navigation/native";
 import { validateUserMain } from '../services/users/auth.js';
 
-// Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
+/**
+ * Crea la vista de Main (Inicio), donde se encuentra el boton de Iniciar Sesion y el boton de Registrarse
+ * @param {*} props Parametros: navigation
+ * @returns Componente Main
+ */
 const Main = ( {navigation} ) => {
     // Verificar si la vista esta enfocada
     const isFocused = useIsFocused();

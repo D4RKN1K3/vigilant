@@ -1,6 +1,10 @@
 import { BACKEND_URL } from '@env'
 
-// Subscribe
+/**
+ * Manda una petición al backend para crear una nueva alerta
+ * @param {*} token Token de autenticación del backend
+ * @returns Devuelve la respuesta de la petición
+ */
 async function subscribe( token ) {
 
     const response = await fetch(BACKEND_URL + '/suscribe', {
@@ -14,8 +18,6 @@ async function subscribe( token ) {
     })
     
     const data = await response.json()
-    console.log("suscrito")
-    console.log(data)
 
     return data
 }

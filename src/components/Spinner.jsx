@@ -1,11 +1,14 @@
 import React from 'react'
-import { StyleSheet, Text, View,
-    ActivityIndicator, } from 'react-native'
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
 
+/**
+ * Crea un Spinner de carga
+ * @returns Componente Spinner
+ */
 const Spinner = () => {
 
     const styles = StyleSheet.create({
-        container: {
+        spinnerContainer: {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
@@ -13,7 +16,7 @@ const Spinner = () => {
     });
 
     return (
-        <View style={styles.container}>
+        <View style={styles.spinnerContainer}>
             {/* antes: f5bc0c */}
             <ActivityIndicator size="large" color="#0000ff" />
             <Text>Cargando...</Text>

@@ -1,6 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 
+/**
+ * Crea un titulo
+ * @param {*} props hijos del componente
+ * @returns Componente Titulo
+ */
 const Titulo = ({children}) => {
 
     // Titulo component styles
@@ -16,7 +21,6 @@ const Titulo = ({children}) => {
     return (
         <Text style={styles.title}>{children}</Text>    
     )
-
 }
 
 

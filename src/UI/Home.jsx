@@ -1,14 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import { Text, View, StyleSheet,BackHandler, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, BackHandler, Alert } from 'react-native';
 import Constants from 'expo-constants';
 import Boton from '../components/Boton';
 import PanicButton from '../components/PanicButton';
 import { useFocusEffect } from "@react-navigation/native";
-import { validateUser, removeUser, getUser} from '../services/users/auth.js';
+import { validateUser, removeUser } from '../services/users/auth.js';
 import 'react-native-get-random-values';
 import Spinner from '../components/Spinner';
 
-// Se debe pasar el parametro {navigation} a la vista para poder usar el navigation.navigate() y cambiar de vista
+/**
+ * Crea la vista de Home (Inicio), donde se encuentra el boton de panico y el boton de cerrar sesion
+ * @param {*} props Parametros: navigation
+ * @returns Componente Home
+ */
 const Home = ( {navigation} ) => {
 
     // USER
@@ -21,7 +25,6 @@ const Home = ( {navigation} ) => {
                 setUser(await validateUser(navigation));
             }
             getUserFromApi();
-            //setUser(validateUser());
             
             const backAction = () => {
                 if (navigation.isFocused()) {
@@ -42,39 +45,55 @@ const Home = ( {navigation} ) => {
             backAction
             );
         }, [])
-
     );
 
-    // LOGOUT
-    const logout = async () => {
+    /**
+     * Cerrar sesion y cambiar a la vista de Main
+     */
+    const handleLogout = async () => {
         if( removeUser() ){
             setUser(null);
             navigation.navigate('Main');
         }
     }
     
-    // Alertas
-    const verAlertas = async () => {
+    /**
+     * Cambiar a la vista de Alertas
+     */
+    const handleVerAlertas = async () => {
         navigation.navigate('Alertas');
     }
 
-    return (
-        // Centrar verticalmente la vista
-        <View style={ {marginTop: Constants.statusBarHeight,
+    const styles = StyleSheet.create({
+        container: {
+            marginTop: Constants.statusBarHeight,
             flex: 1,
             flexDirection: 'column',
             justifyContent: 'center',
-        }  }>
+        },
+        mainTitle: {
+            fontSize: 20,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            marginTop: 10,
+            color: '#333',
+        },
+    });
+
+
+    return (
+        // Centrar verticalmente la vista
+        <View style={styles.container}>
             {user ? (
             <View>
 
-                {user && <Text style={{fontSize: 20, color: '#f5bc0c', fontWeight: 'bold', textAlign: 'center'}}>Bienvenido(a) {user.nombre}</Text>}
+                {user && <Text style={styles.mainTitle}>Bienvenido(a) {user.nombre}</Text>}
 
                 <PanicButton />
 
-                <Boton title="Cerrar Sesion" onPress={logout} color="#ce0a0a" />
+                <Boton title="Cerrar Sesion" onPress={handleLogout} color="#ce0a0a" />
 
-                <Boton title="Ver Alertas" onPress={verAlertas} />
+                <Boton title="Ver Alertas" onPress={handleVerAlertas} />
 
             </View>
             ):(
